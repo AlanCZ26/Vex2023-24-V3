@@ -22,6 +22,20 @@ Distance cataDistance(1);
 
 Imu imu(1);
 
+bool cataRunner = false;
+void cataThread()
+{
+	while (true)
+	{
+		pros::delay(10);
+		if (cataRunner)
+		{
+			catapult();
+			cataRunner = false;
+		}
+	}
+}
+
 /**
  * A callback function for LLEMU's center button.
  *
@@ -54,6 +68,8 @@ void initialize()
 	pros::lcd::set_text(1, "Hello PROS User!");
 
 	pros::lcd::register_btn1_cb(on_center_button);
+
+	Task cataTask(cataThread);
 }
 
 /**
@@ -117,6 +133,6 @@ void opcontrol()
 		left_mtr = left;
 		right_mtr = right;
 
-		pros::delay(20);
+		pros::delay(10);
 	}
 }

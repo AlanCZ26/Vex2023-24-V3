@@ -81,6 +81,8 @@ void opcontrol(void);
 //#include <iostream>
 #endif
 
+extern Controller controller;
+
 extern Motor lMotor1;
 extern Motor lMotor2;
 extern Motor ltMotor;
