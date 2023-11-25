@@ -81,24 +81,24 @@ void opcontrol(void);
 //#include <iostream>
 #endif
 
-Motor lMotor1;
-Motor lMotor2;
-Motor ltMotor;
-Motor rMotor1;
-Motor rMotor2(1, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor rtMotor(1, MOTOR_GEAR_BLUE, true);
-Motor intakeMotor(1, MOTOR_GEAR_BLUE);
-Motor cataMotor(1, MOTOR_GEAR_RED);
+extern Motor lMotor1;
+extern Motor lMotor2;
+extern Motor ltMotor;
+extern Motor rMotor1;
+extern Motor rMotor2;
+extern Motor rtMotor;
+extern Motor intakeMotor;
+extern Motor cataMotor;
 
-ADIDigitalOut ptoSol({{1, 1}});
-ADIDigitalOut wingsSol({{1, 2}});
-ADIDigitalOut sideSol({{1, 3}});
-ADIDigitalOut ratchSol({{1, 4}});
-ADIDigitalIn cataLimit({{1, 5}});
+extern ADIDigitalOut ptoSol;
+extern ADIDigitalOut wingsSol;
+extern ADIDigitalOut sideSol;
+extern ADIDigitalOut ratchSol;
+extern ADIDigitalIn cataLimit;
 
-Rotation liftSensor(1);
-Distance cataDistance(1);
+extern Rotation liftSensor;
+extern Distance cataDistance;
 
-Imu imu(1);
+extern Imu imu;
 
 #endif  // _PROS_MAIN_H_
