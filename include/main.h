@@ -50,7 +50,7 @@
  * concurrently! The okapi namespace will export all symbols inside the pros
  * namespace.
  */
-// using namespace pros;
+using namespace pros;
 // using namespace pros::literals;
 // using namespace okapi;
 
@@ -59,6 +59,9 @@
  * that they can be called from user code (i.e. calling autonomous from a
  * button press in opcontrol() for testing purposes).
  */
+
+#include "SGS/SGSincludes.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -77,5 +80,27 @@ void opcontrol(void);
  */
 //#include <iostream>
 #endif
+
+extern Controller controller;
+
+extern Motor lMotor1;
+extern Motor lMotor2;
+extern Motor ltMotor;
+extern Motor rMotor1;
+extern Motor rMotor2;
+extern Motor rtMotor;
+extern Motor intakeMotor;
+extern Motor cataMotor;
+
+extern ADIDigitalOut ptoSol;
+extern ADIDigitalOut wingsSol;
+extern ADIDigitalOut sideSol;
+extern ADIDigitalOut ratchSol;
+extern ADIDigitalIn cataLimit;
+
+extern Rotation liftSensor;
+extern Distance cataDistance;
+
+extern Imu imu;
 
 #endif  // _PROS_MAIN_H_
