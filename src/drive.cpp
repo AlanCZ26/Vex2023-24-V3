@@ -66,11 +66,22 @@ void PTOmotors(int s)
 
 void catapult()
 {
-    if (!controller.get_digital(E_CONTROLLER_DIGITAL_X)){
+    if (!controller.get_digital(E_CONTROLLER_DIGITAL_X))
+    {
         pros::delay(50);
     }
     cataMotor = 127;
     delay(100);
-    cataMotor.brake();
-    delay(30);
+    if (!controller.get_digital(E_CONTROLLER_DIGITAL_X))
+    {
+        while (cataLimit.get_value() == 1)
+        {
+            delay(10);
+        }
+        cataMotor.brake();
+    }
+}
+
+void lifter(){
+    
 }

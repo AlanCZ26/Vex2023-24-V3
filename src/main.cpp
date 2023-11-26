@@ -36,6 +36,13 @@ void cataThread()
 	}
 }
 
+int liftVar;
+void liftThread(){
+	while (true){
+
+	}
+}
+
 /**
  * A callback function for LLEMU's center button.
  *
@@ -70,6 +77,9 @@ void initialize()
 	pros::lcd::register_btn1_cb(on_center_button);
 
 	Task cataTask(cataThread);
+	Task liftTask(liftThread);
+	imu.reset();
+	pros::delay(2000);
 }
 
 /**
