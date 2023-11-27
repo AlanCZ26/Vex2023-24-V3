@@ -41,6 +41,10 @@ void liftThread()
 {
 	while (true)
 	{
+		if (liftVar != 0)
+		{
+			lifter(liftVar);
+		}
 		pros::delay(10);
 	}
 }
@@ -74,13 +78,18 @@ void on_center_button()
 void initialize()
 {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+	pros::lcd::set_text(1, "initialize");
 
 	pros::lcd::register_btn1_cb(on_center_button);
 
 	Task cataTask(cataThread);
 	Task liftTask(liftThread);
 	imu.reset();
+
+	cataMotor.set_brake_mode(MOTOR_BRAKE_HOLD);
+	intakeMotor.set_brake_mode(MOTOR_BRAKE_HOLD);
+	set_stopping(defaultBrakeMode);
+	
 	pros::delay(2000);
 }
 
@@ -166,6 +175,18 @@ void opcontrol()
 			intakeMotor = -127;
 		else
 			intakeMotor.brake();
+		if (controller.get_digital(DIGITAL_X))
+			cataRunner = true;
+		if (controller.get_analog(ANALOG_RIGHT_Y) > 90)
+		{
+			liftVar = UP;
+			set_stopping(MOTOR_BRAKE_BRAKE);
+		}
+		else if (controller.get_analog(ANALOG_RIGHT_Y) < -90)
+		{
+			liftVar = DOWN;
+			set_stopping(defaultBrakeMode);
+		}
 		pros::delay(10);
 	}
 }

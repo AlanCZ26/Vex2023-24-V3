@@ -29,8 +29,18 @@ void drivetrain(int l, int r)
     }
 }
 
-void driveDifferencial(int s, int r) {
+void driveDifferencial(int s, int r)
+{
     drivetrain(s + r, s - r);
+}
+
+double getEncoders()
+{
+    double raw;
+    double output;
+    raw = lMotor1.get_position() + lMotor2.get_position() + rMotor1.get_position() + rMotor2.get_position();
+    output = raw / 4;
+    return output;
 }
 
 void set_stopping(motor_brake_mode_e_t i)
@@ -95,9 +105,10 @@ void catapult()
     }
 }
 
-void lifter(int state)
+int currentLiftState;
+void lifter(int i)
 {
-    if (state == UP)
+    if (i == UP && currentLiftState != UP)
     {
         ptoSwitcher(PTO);
         ratchSol.set_value(true);
@@ -115,8 +126,9 @@ void lifter(int state)
         pros::delay(50);
         PTOmotors(0);
         liftVar = 0;
+        currentLiftState = UP;
     }
-    else if (state == DOWN)
+    else if (i == DOWN && currentLiftState != DOWN)
     {
         ltMotor.set_brake_mode(E_MOTOR_BRAKE_COAST);
         rtMotor.set_brake_mode(E_MOTOR_BRAKE_COAST);
@@ -131,5 +143,6 @@ void lifter(int state)
         PTOmotors(0);
         ptoSwitcher(DRIVE);
         liftVar = 0;
+        currentLiftState = DOWN;
     }
 }

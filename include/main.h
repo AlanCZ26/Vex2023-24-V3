@@ -103,4 +103,7 @@ extern Distance cataDistance;
 
 extern Imu imu;
 
+// prefs:
+motor_brake_mode_e defaultBrakeMode = MOTOR_BRAKE_BRAKE;
+
 #endif  // _PROS_MAIN_H_
