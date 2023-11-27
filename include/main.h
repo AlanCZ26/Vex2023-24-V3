@@ -94,6 +94,7 @@ extern Motor cataMotor;
 
 extern ADIDigitalOut ptoSol;
 extern ADIDigitalOut wingsSol;
+extern ADIDigitalOut wingsSol2;
 extern ADIDigitalOut sideSol;
 extern ADIDigitalOut ratchSol;
 extern ADIDigitalIn cataLimit;

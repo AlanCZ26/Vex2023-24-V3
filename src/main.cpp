@@ -2,17 +2,18 @@
 
 Controller controller(E_CONTROLLER_MASTER);
 
-Motor lMotor1(1, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor lMotor2(1, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor ltMotor(1, MOTOR_GEAR_BLUE, false);
-Motor rMotor1(1, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor rMotor2(1, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor rtMotor(1, MOTOR_GEAR_BLUE, true);
+Motor lMotor1(1, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor lMotor2(1, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor ltMotor(1, MOTOR_GEAR_BLUE, true);
+Motor rMotor1(1, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor2(1, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rtMotor(1, MOTOR_GEAR_BLUE, false);
 Motor intakeMotor(1, MOTOR_GEAR_BLUE);
 Motor cataMotor(1, MOTOR_GEAR_RED);
 
 ADIDigitalOut ptoSol({{1, 1}});
 ADIDigitalOut wingsSol({{1, 2}});
+ADIDigitalOut wingsSol2({{1,2}});
 ADIDigitalOut sideSol({{1, 3}});
 ADIDigitalOut ratchSol({{1, 4}});
 ADIDigitalIn cataLimit({{1, 5}});
@@ -140,6 +141,14 @@ void autonomous() {}
 void opcontrol()
 {
 	/*
+	l1 = intake in
+	l2 = int out
+	r1 = wings toggle
+	r2 = side mech
+	up = intake up
+	x = constant shooting
+	down  = ratchet
+
 
 	*/
 	bool wingsState = false;
@@ -159,7 +168,7 @@ void opcontrol()
 			sideState = !sideState;
 			sideSol.set_value(sideState);
 		}
-		if (controller.get_digital_new_press(DIGITAL_RIGHT))
+		if (controller.get_digital_new_press(DIGITAL_DOWN))
 		{
 			ratchState = !ratchState;
 			ratchSol.set_value(ratchState);
