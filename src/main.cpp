@@ -17,7 +17,7 @@ ADIDigitalOut sideSol({{1, 3}});
 ADIDigitalOut ratchSol({{1, 4}});
 ADIDigitalIn cataLimit({{1, 5}});
 
-Rotation liftSensor(1);
+Rotation liftSensor(10);
 Distance cataDistance(1);
 
 Imu imu(1);
@@ -37,9 +37,11 @@ void cataThread()
 }
 
 int liftVar;
-void liftThread(){
-	while (true){
-
+void liftThread()
+{
+	while (true)
+	{
+		pros::delay(10);
 	}
 }
 
@@ -128,21 +130,42 @@ void autonomous() {}
  */
 void opcontrol()
 {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
+	/*
 
+	*/
+	bool wingsState = false;
+	bool sideState = false;
+	bool ratchState = false;
+	controller.set_text(0, 0, "Ratchet is off");
 	while (true)
 	{
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-						 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-						 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
-
-		left_mtr = left;
-		right_mtr = right;
-
+		driveDifferencial(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_RIGHT_Y));
+		if (controller.get_digital_new_press(DIGITAL_R1))
+		{
+			wingsState = !wingsState;
+			wingsSol.set_value(wingsState);
+		}
+		if (controller.get_digital_new_press(DIGITAL_R2))
+		{
+			sideState = !sideState;
+			sideSol.set_value(sideState);
+		}
+		if (controller.get_digital_new_press(DIGITAL_RIGHT))
+		{
+			ratchState = !ratchState;
+			ratchSol.set_value(ratchState);
+			controller.clear_line(0);
+			if (ratchState == true)
+				controller.set_text(0, 0, "Ratchet on");
+			else
+				controller.set_text(0, 0, "Ratchet off");
+		}
+		if (controller.get_digital(DIGITAL_L1))
+			intakeMotor = 127;
+		else if (controller.get_digital(DIGITAL_L2))
+			intakeMotor = -127;
+		else
+			intakeMotor.brake();
 		pros::delay(10);
 	}
 }
