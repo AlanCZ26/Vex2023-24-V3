@@ -2,26 +2,27 @@
 
 Controller controller(E_CONTROLLER_MASTER);
 
-Motor lMotor1(1, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor lMotor2(1, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor ltMotor(1, MOTOR_GEAR_BLUE, true);
-Motor rMotor1(1, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor rMotor2(1, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor rtMotor(1, MOTOR_GEAR_BLUE, false);
-Motor intakeMotor(1, MOTOR_GEAR_BLUE);
-Motor cataMotor(1, MOTOR_GEAR_RED);
+Motor lMotor1(12, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor lMotor2(13, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor ltMotor(3, MOTOR_GEAR_BLUE, true);
+Motor rMotor1(19, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor2(20, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rtMotor(10, MOTOR_GEAR_BLUE, false);
+Motor intakeMotor(18, MOTOR_GEAR_BLUE);
+Motor cataMotor(2, MOTOR_GEAR_RED);
 
-ADIDigitalOut ptoSol({{1, 1}});
-ADIDigitalOut wingsSol({{1, 2}});
-ADIDigitalOut wingsSol2({{1,2}});
-ADIDigitalOut sideSol({{1, 3}});
-ADIDigitalOut ratchSol({{1, 4}});
-ADIDigitalIn cataLimit({{1, 5}});
+ADIDigitalOut ptoSol(std::uint8_t H);
+ADIDigitalOut wingsSol({{17, 8}});
+ADIDigitalOut wingsSol2({{17,6}});
+ADIDigitalOut sideSol({{17, 5}});
+ADIDigitalOut ratchSol({{17, 4}});
+ADIDigitalOut intakeSol(std::uint8_t E);
+ADIDigitalIn cataLimit({{17, 7}});
 
-Rotation liftSensor(10);
+Rotation liftSensor(16);
 Distance cataDistance(1);
 
-Imu imu(1);
+Imu imu(6);
 
 bool cataRunner = false;
 void cataThread()
