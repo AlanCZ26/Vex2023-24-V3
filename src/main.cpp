@@ -11,12 +11,12 @@ Motor rtMotor(10, MOTOR_GEAR_BLUE, false);
 Motor intakeMotor(18, MOTOR_GEAR_BLUE);
 Motor cataMotor(2, MOTOR_GEAR_RED);
 
-ADIDigitalOut ptoSol(std::uint8_t H);
+ADIDigitalOut ptoSol(8);
 ADIDigitalOut wingsSol({{17, 8}});
 ADIDigitalOut wingsSol2({{17,6}});
 ADIDigitalOut sideSol({{17, 5}});
 ADIDigitalOut ratchSol({{17, 4}});
-ADIDigitalOut intakeSol(std::uint8_t E);
+ADIDigitalOut intakeSol(5);
 ADIDigitalIn cataLimit({{17, 7}});
 
 Rotation liftSensor(16);
@@ -90,7 +90,7 @@ void initialize()
 
 	cataMotor.set_brake_mode(MOTOR_BRAKE_HOLD);
 	intakeMotor.set_brake_mode(MOTOR_BRAKE_HOLD);
-	set_stopping(defaultBrakeMode);
+	set_stopping(defBR);
 	
 	pros::delay(2000);
 }
@@ -139,6 +139,7 @@ void autonomous() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+motor_brake_mode_e defBR = MOTOR_BRAKE_BRAKE;
 void opcontrol()
 {
 	/*
@@ -195,7 +196,7 @@ void opcontrol()
 		else if (controller.get_analog(ANALOG_RIGHT_Y) < -90)
 		{
 			liftVar = DOWN;
-			set_stopping(defaultBrakeMode);
+			set_stopping(defBR);
 		}
 		pros::delay(10);
 	}
