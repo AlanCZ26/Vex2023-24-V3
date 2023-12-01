@@ -13,7 +13,7 @@ Motor cataMotor(2, MOTOR_GEAR_RED);
 
 ADIDigitalOut ptoSol(8);
 ADIDigitalOut wingsSol({{17, 8}});
-ADIDigitalOut wingsSol2({{17,6}});
+ADIDigitalOut wingsSol2({{17, 6}});
 ADIDigitalOut sideSol({{17, 5}});
 ADIDigitalOut ratchSol({{17, 4}});
 ADIDigitalOut intakeSol(5);
@@ -33,7 +33,6 @@ void cataThread()
 		if (cataRunner)
 		{
 			catapult();
-			cataRunner = false;
 		}
 	}
 }
@@ -91,7 +90,7 @@ void initialize()
 	cataMotor.set_brake_mode(MOTOR_BRAKE_HOLD);
 	intakeMotor.set_brake_mode(MOTOR_BRAKE_HOLD);
 	set_stopping(defBR);
-	
+
 	pros::delay(2000);
 }
 
@@ -159,9 +158,8 @@ void opcontrol()
 	controller.set_text(0, 0, "Ratchet is off");
 	while (true)
 	{
-
-		pros::lcd::set_text(0,std::to_string(liftSensor.get_angle()));
-		driveDifferencial((controller.get_analog(ANALOG_LEFT_Y)), (controller.get_analog(ANALOG_RIGHT_X)));
+		// pros::lcd::set_text(0,std::to_string(liftSensor.get_angle()));
+		driveDifferencial((controller.get_analog(ANALOG_LEFT_Y) * 1.2), (controller.get_analog(ANALOG_RIGHT_X) * 1.2));
 		if (controller.get_digital_new_press(DIGITAL_R1))
 		{
 			wingsState = !wingsState;
@@ -191,6 +189,7 @@ void opcontrol()
 			intakeMotor.brake();
 		if (controller.get_digital(DIGITAL_X))
 			cataRunner = true;
+		else cataRunner = false;
 		if (controller.get_analog(ANALOG_RIGHT_Y) > 90)
 		{
 			liftVar = UP;
@@ -201,6 +200,6 @@ void opcontrol()
 			liftVar = DOWN;
 			set_stopping(defBR);
 		}
-		pros::delay(100);
+		pros::delay(10);
 	}
 }

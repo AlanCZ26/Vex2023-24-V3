@@ -3,7 +3,7 @@
 int PTOvar = DRIVE;
 void drivetrain(int l, int r)
 {
-    //controller.clear_line(0);
+    // controller.clear_line(0);
 
     if (l == 0 && r == 0)
     {
@@ -93,20 +93,19 @@ void PTOmotors(int s)
 
 void catapult()
 {
+    /*
     if (!controller.get_digital(E_CONTROLLER_DIGITAL_X))
     {
         pros::delay(50);
     }
+    */
     cataMotor = 127;
-    delay(100);
-    if (!controller.get_digital(E_CONTROLLER_DIGITAL_X))
+    delay(200);
+    while (cataLimit.get_value() == 0 || cataRunner == true)
     {
-        while (cataLimit.get_value() == 1)
-        {
-            delay(10);
-        }
-        cataMotor.brake();
+        delay(10);
     }
+    cataMotor.brake();
 }
 
 int currentLiftState;
