@@ -3,7 +3,9 @@
 int PTOvar = DRIVE;
 void drivetrain(int l, int r)
 {
-    if (l == r == 0)
+    //controller.clear_line(0);
+
+    if (l == 0 && r == 0)
     {
         lMotor1.brake();
         lMotor2.brake();
@@ -21,7 +23,7 @@ void drivetrain(int l, int r)
         lMotor2 = l;
         rMotor1 = r;
         rMotor2 = r;
-        if (PTOvar == PTO)
+        if (PTOvar == DRIVE)
         {
             ltMotor = l;
             rtMotor = r;
@@ -31,7 +33,9 @@ void drivetrain(int l, int r)
 
 void driveDifferencial(int s, int r)
 {
-    drivetrain(s + r, s - r);
+    int left = s + r;
+    int right = s - r;
+    drivetrain(left, right);
 }
 
 double getEncoders()
@@ -111,14 +115,14 @@ void lifter(int i)
     if (i == UP && currentLiftState != UP)
     {
         ptoSwitcher(PTO);
-        ratchSol.set_value(true);
+        ratchSol.set_value(false);
         controller.clear_line(0);
         controller.set_text(0, 0, "Ratchet off");
         ltMotor.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
         rtMotor.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
         PTOmotors(127);
         int i = 0;
-        while ((liftSensor.get_position() % 360) < 100 && i <= 30)
+        while (((liftSensor.get_position()) < 10500) && (i <= 30))
         {
             pros::delay(100);
             i++;
@@ -134,7 +138,7 @@ void lifter(int i)
         rtMotor.set_brake_mode(E_MOTOR_BRAKE_COAST);
         PTOmotors(-127);
         int i = 0;
-        while ((liftSensor.get_position() % 360) > 5 && i <= 30)
+        while ((liftSensor.get_position()) > 700 && i <= 30)
         {
             pros::delay(100);
             i++;

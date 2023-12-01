@@ -8,7 +8,7 @@ Motor ltMotor(3, MOTOR_GEAR_BLUE, true);
 Motor rMotor1(19, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 Motor rMotor2(20, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 Motor rtMotor(10, MOTOR_GEAR_BLUE, false);
-Motor intakeMotor(18, MOTOR_GEAR_BLUE);
+Motor intakeMotor(18, MOTOR_GEAR_BLUE, true);
 Motor cataMotor(2, MOTOR_GEAR_RED);
 
 ADIDigitalOut ptoSol(8);
@@ -159,11 +159,14 @@ void opcontrol()
 	controller.set_text(0, 0, "Ratchet is off");
 	while (true)
 	{
-		driveDifferencial(controller.get_analog(ANALOG_LEFT_X), controller.get_analog(ANALOG_RIGHT_Y));
+
+		pros::lcd::set_text(0,std::to_string(liftSensor.get_angle()));
+		driveDifferencial((controller.get_analog(ANALOG_LEFT_Y)), (controller.get_analog(ANALOG_RIGHT_X)));
 		if (controller.get_digital_new_press(DIGITAL_R1))
 		{
 			wingsState = !wingsState;
 			wingsSol.set_value(wingsState);
+			wingsSol2.set_value(wingsState);
 		}
 		if (controller.get_digital_new_press(DIGITAL_R2))
 		{
@@ -198,6 +201,6 @@ void opcontrol()
 			liftVar = DOWN;
 			set_stopping(defBR);
 		}
-		pros::delay(10);
+		pros::delay(100);
 	}
 }
