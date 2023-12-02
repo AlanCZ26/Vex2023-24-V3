@@ -110,7 +110,9 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+void competition_initialize() {
+	pros::lcd::set_text(1, "compinit");
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -123,7 +125,10 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+	pros::lcd::set_text(1, "auto");
+	auto_testing();
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -141,6 +146,7 @@ void autonomous() {}
 motor_brake_mode_e defBR = MOTOR_BRAKE_BRAKE;
 void opcontrol()
 {
+	pros::lcd::set_text(1, "driver");
 	/*
 	l1 = intake in
 	l2 = int out

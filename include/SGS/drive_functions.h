@@ -8,12 +8,12 @@ const int UP = 2;
 /** 
  * range (-127 - 127)
  */
-void drivetrain(int l, int r);
+void drivetrain(double l, double r);
 
 /** \param s forward/backward speed (-127 - 127)
  *  \param r rotation speed (-127 - 127)
  */
-void driveDifferencial(int s, int r);
+void driveDifferencial(double s, double r);
 
 /** shoot cata once */
 void catapult();
@@ -22,4 +22,8 @@ void lifter(int state);
 
 void ptoSwitcher(int i);
 
-void set_stopping(motor_brake_mode_e i);
+void set_stopping(pros::motor_brake_mode_e i);
+
+void tare_encoders();
+
+double getEncoders();

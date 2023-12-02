@@ -1,7 +1,7 @@
 #include "main.h"
 
 int PTOvar = DRIVE;
-void drivetrain(int l, int r)
+void drivetrain(double l, double r)
 {
     // controller.clear_line(0);
 
@@ -31,20 +31,29 @@ void drivetrain(int l, int r)
     }
 }
 
-void driveDifferencial(int s, int r)
+void driveDifferencial(double s, double r)
 {
-    int left = s + r;
-    int right = s - r;
+    double left = s + r;
+    double right = s - r;
     drivetrain(left, right);
 }
 
 double getEncoders()
 {
     double raw;
+    double average;
     double output;
     raw = lMotor1.get_position() + lMotor2.get_position() + rMotor1.get_position() + rMotor2.get_position();
-    output = raw / 4;
+    average = raw / 4;
+    output = average / 300 * 6.1261056745;
     return output;
+}
+
+void tare_encoders() {
+    lMotor1.tare_position();
+    lMotor2.tare_position();
+    rMotor1.tare_position();
+    rMotor2.tare_position();
 }
 
 void set_stopping(motor_brake_mode_e_t i)
