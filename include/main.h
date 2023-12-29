@@ -35,12 +35,8 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
-
-/**
- * You should add more #includes here
- */
-#include "okapi/api.hpp"
-//#include "pros/api_legacy.h"
+#include "timer.hpp"
+#include "autoFunctions.hpp"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
@@ -59,9 +55,6 @@ using namespace pros;
  * that they can be called from user code (i.e. calling autonomous from a
  * button press in opcontrol() for testing purposes).
  */
-
-#include "SGS/SGSincludes.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -80,31 +73,27 @@ void opcontrol(void);
  */
 //#include <iostream>
 #endif
-
-extern Controller controller;
-
-extern Motor lMotor1;
+extern Motor lMotor1; 
 extern Motor lMotor2;
 extern Motor ltMotor;
 extern Motor rMotor1;
 extern Motor rMotor2;
 extern Motor rtMotor;
-extern Motor intakeMotor;
+
+extern Motor intMotor;
 extern Motor cataMotor;
 
-extern ADIDigitalOut ptoSol;
-extern ADIDigitalOut wingsSol;
-extern ADIDigitalOut wingsSol2;
-extern ADIDigitalOut sideSol;
-extern ADIDigitalOut ratchSol;
-extern ADIDigitalIn cataLimit;
+extern Rotation liftSens;
+extern Distance cataDist;
+extern Rotation cataRot;
+extern Imu gyro;
 
-extern Rotation liftSensor;
-extern Distance cataDistance;
+extern ADIDigitalOut PTOpiston;
+extern ADIDigitalOut wingsSolenoid2;
+extern ADIDigitalOut wingsSolenoid;
+extern ADIDigitalOut sidePiston;
+extern ADIDigitalOut ratchPiston;
+extern ADIDigitalOut intakePiston;
 
-extern Imu imu;
-
-// prefs:
-extern motor_brake_mode_e defBR;
-
+extern Controller master;
 #endif  // _PROS_MAIN_H_

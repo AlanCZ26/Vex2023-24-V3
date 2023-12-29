@@ -1,71 +1,63 @@
 #include "main.h"
+#include "autoFunctions.hpp"
+#include "pros/llemu.hpp"
+#include "pros/motors.h"
+#include "pros/screen.h"
+#include "timer.hpp"
+#include <sys/_stdint.h>
+#include "lemlib/api.hpp"
 
-Controller controller(E_CONTROLLER_MASTER);
+Motor lMotor1(6);
+Motor lMotor2(7);
+Motor ltMotor(1);
+Motor rMotor1(-8);
+Motor rMotor2(-9);
+Motor rtMotor(-10);
 
-Motor lMotor1(12, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor lMotor2(13, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor ltMotor(3, MOTOR_GEAR_BLUE, true);
-Motor rMotor1(19, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor rMotor2(20, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor rtMotor(10, MOTOR_GEAR_BLUE, false);
-Motor intakeMotor(18, MOTOR_GEAR_BLUE, true);
-Motor cataMotor(2, MOTOR_GEAR_RED);
+Motor intMotor(-11);
+Motor cataMotor(-16);
 
-ADIDigitalOut ptoSol(8);
-ADIDigitalOut wingsSol({{17, 8}});
-ADIDigitalOut wingsSol2({{17, 6}});
-ADIDigitalOut sideSol({{17, 5}});
-ADIDigitalOut ratchSol({{17, 4}});
-ADIDigitalOut intakeSol(5);
-ADIDigitalIn cataLimit({{17, 7}});
+Rotation liftSens(19);
+Distance cataDist(13);
+Rotation cataRot(12);
+Imu gyro(2);
 
-Rotation liftSensor(16);
-Distance cataDistance(1);
+ADIDigitalOut PTOpiston({{20, 'd'}});
+ADIDigitalOut wingsSolenoid2({{20, 'g'}});
+ADIDigitalOut wingsSolenoid({{20, 'h'}});
+ADIDigitalOut backRight({{20, 'b'}});
+ADIDigitalOut ratchPiston({{20, 'c'}});
+ADIDigitalOut backLeft({{20, 'a'}});
 
-Imu imu(6);
+ADIDigitalOut intakePiston(8);
 
-bool cataRunner = false;
-void cataThread()
-{
-	while (true)
-	{
-		pros::delay(10);
-		if (cataRunner)
-		{
-			catapult();
-		}
-	}
-}
-
-int liftVar;
-void liftThread()
-{
-	while (true)
-	{
-		if (liftVar != 0)
-		{
-			lifter(liftVar);
-		}
-		pros::delay(10);
-	}
-}
-
+Controller master(E_CONTROLLER_MASTER);
 /**
  * A callback function for LLEMU's center button.
  *
  * When this callback is fired, it will toggle line 2 of the LCD text between
  * "I was pressed!" and nothing.
  */
-void on_center_button()
+
+
+
+int position = 4;
+
+void liftThread()
 {
+	while (true)
+	{
+		pros::delay(10);
+		moveArm(position);
+	}
+}
+
+void on_center_button() {
 	static bool pressed = false;
 	pressed = !pressed;
-	if (pressed)
-	{
+	if (pressed) {
 		pros::lcd::set_text(2, "I was pressed!");
-	}
-	else
-	{
+	} else {
 		pros::lcd::clear_line(2);
 	}
 }
@@ -76,22 +68,20 @@ void on_center_button()
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize()
-{
+void initialize() {
 	pros::lcd::initialize();
-	pros::lcd::set_text(1, "initialize");
+	pros::lcd::set_text(1, "Hello PROS User!");
 
 	pros::lcd::register_btn1_cb(on_center_button);
-
-	Task cataTask(cataThread);
-	Task liftTask(liftThread);
-	imu.reset();
-
-	cataMotor.set_brake_mode(MOTOR_BRAKE_HOLD);
-	intakeMotor.set_brake_mode(MOTOR_BRAKE_HOLD);
-	set_stopping(defBR);
-
-	pros::delay(2000);
+	Task cataTask(catapult);
+	Task armTask(liftThread);
+	gyro.reset();
+	delay(2000); 
+	pros::Distance catapultLoadDist(12);
+	rMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	rMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	lMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 }
 
 /**
@@ -110,9 +100,7 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {
-	pros::lcd::set_text(1, "compinit");
-}
+void competition_initialize() {}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -126,8 +114,13 @@ void competition_initialize() {
  * from where it left off.
  */
 void autonomous() {
-	pros::lcd::set_text(1, "auto");
-	auto_testing();
+	intMotor = 127; 
+	driveStraight(10, 0, 100, 5000, 1, 0, 0);
+	//turn(-90, 10000, 1, 0, 10); 
+	intMotor = 0;
+
+
+	//pros::screen::print(TEXT_MEDIUM, 6, "x: %i", gyro);
 }
 
 /**
@@ -143,69 +136,108 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-motor_brake_mode_e defBR = MOTOR_BRAKE_BRAKE;
-void opcontrol()
-{
-	pros::lcd::set_text(1, "driver");
-	/*
-	l1 = intake in
-	l2 = int out
-	r1 = wings toggle
-	r2 = side mech
-	up = intake up
-	x = constant shooting
-	down  = ratchet
-
-
-	*/
-	bool wingsState = false;
-	bool sideState = false;
-	bool ratchState = false;
-	controller.set_text(0, 0, "Ratchet is off");
-	while (true)
-	{
-		// pros::lcd::set_text(0,std::to_string(liftSensor.get_angle()));
-		driveDifferencial((controller.get_analog(ANALOG_LEFT_Y) * 1.2), (controller.get_analog(ANALOG_RIGHT_X) * 1.2));
-		if (controller.get_digital_new_press(DIGITAL_R1))
-		{
-			wingsState = !wingsState;
-			wingsSol.set_value(wingsState);
-			wingsSol2.set_value(wingsState);
-		}
-		if (controller.get_digital_new_press(DIGITAL_R2))
-		{
-			sideState = !sideState;
-			sideSol.set_value(sideState);
-		}
-		if (controller.get_digital_new_press(DIGITAL_DOWN))
-		{
-			ratchState = !ratchState;
-			ratchSol.set_value(ratchState);
-			controller.clear_line(0);
-			if (ratchState == true)
-				controller.set_text(0, 0, "Ratchet on");
-			else
-				controller.set_text(0, 0, "Ratchet off");
-		}
-		if (controller.get_digital(DIGITAL_L1))
-			intakeMotor = 127;
-		else if (controller.get_digital(DIGITAL_L2))
-			intakeMotor = -127;
-		else
-			intakeMotor.brake();
-		if (controller.get_digital(DIGITAL_X))
-			cataRunner = true;
-		else cataRunner = false;
-		if (controller.get_analog(ANALOG_RIGHT_Y) > 90)
-		{
-			liftVar = UP;
-			set_stopping(MOTOR_BRAKE_BRAKE);
-		}
-		else if (controller.get_analog(ANALOG_RIGHT_Y) < -90)
-		{
-			liftVar = DOWN;
-			set_stopping(defBR);
-		}
+void opcontrol() {
+	int x;
+	int y;
+	bool toggle = 0;
+	bool toggleWing = 0;
+	bool toggleBack = 0;
+	bool toggleBackRight = 0;
+	PTOvar=false;
+	cataRunner = false;
+	int iter = 0;
+	while (gyro.is_calibrating()){
+		pros::screen::print(TEXT_MEDIUM, 7, "gyro calibrating... %d/n", iter);
+		iter += 10;
 		pros::delay(10);
+	}
+
+
+	while (true) {
+		x = master.get_analog(ANALOG_RIGHT_X);
+		y = master.get_analog(ANALOG_LEFT_Y);
+		moveDriveMotors(-y,x);
+		pros::screen::print(TEXT_MEDIUM, 2, "x: %i", x);
+		pros::screen::print(TEXT_MEDIUM, 3, "x: %i", y);
+		pros::screen::print(TEXT_MEDIUM, 4, "cata: %i", cataRunner);
+		
+		pros::screen::print(TEXT_MEDIUM, 5, "gyro heading: %f", gyro.get_heading());
+		pros::screen::print(TEXT_MEDIUM, 6, "gyro rotation: %f", gyro.get_rotation());
+		//pros::screen::print(TEXT_MEDIUM, 5, "dist: %i", catapultLoadDist.get());
+
+		if (master.get_digital_new_press(DIGITAL_Y) == 1){
+			ratchPiston.set_value(0);
+			position = 1;
+			backRight.set_value(1);
+
+		}
+		// if (master.get_digital_new_press(DIGITAL_UP) == 1){
+		// 	ratchPiston.set_value(1);
+		// }
+		else if(master.get_analog(ANALOG_RIGHT_Y) <= -96) {
+			ratchPiston.set_value(1);
+			position = 0;
+			backRight.set_value(0);
+		}
+		else if(master.get_digital_new_press(DIGITAL_RIGHT) == 1){
+			ratchPiston.set_value(0);
+			position = 2;
+		}
+
+		if (master.get_digital_new_press(DIGITAL_X) == 1){
+			toggle = !toggle;
+			intakePiston.set_value(toggle);
+			
+		}
+		if (master.get_digital_new_press(DIGITAL_R1) == 1){
+			toggleWing = !toggleWing;
+			wingsSolenoid2.set_value(toggleWing);
+			wingsSolenoid.set_value(toggleWing);
+		}
+		if (master.get_digital_new_press(DIGITAL_R2) == 1){
+			toggleBack = !toggleBack;
+			startTimer(5);
+			backRight.set_value(toggleBack);
+			backLeft.set_value(toggleBack);
+		}
+		// else if(getTime(5) >= 2 && master.get_digital(DIGITAL_R2)){
+		// 	backLeft.set_value(1);
+		// 	backRight.set_value(1);
+		// }
+
+		if (master.get_digital(DIGITAL_UP) == 1){
+			cataRunner = true;
+		}
+		else{
+			cataRunner = false;
+		}
+		if(master.get_digital(DIGITAL_L1) == 1){
+			intMotor = 127;
+		}
+		else if(master.get_digital(DIGITAL_L2) == 1){
+			intMotor = -127;
+		}
+		else {
+			intMotor= 0;
+		}
+		//hold r2 = 1 side down, let go is back up
+		//press r2 once = both down with toggle back up
+		/*if (master.get_digital_new_press(DIGITAL_R1) == 1){
+			toggleWing = !toggleWing;
+			wingsSolenoid2.set_value(toggle);
+			wingsSolenoid.set_value(toggle);
+		}
+		*/
+		/*if (master.get_digital_new_press(DIGITAL_X) == 1){
+			toggle = !toggle;
+			intakePiston.set_value(toggle);
+			
+		}*/
+		
+		/*
+		if (master.get_digital_new_press(DIGITAL_UP) == 1){
+			PTOswitcher(1);
+		}*/
+		pros::delay(20);
 	}
 }
