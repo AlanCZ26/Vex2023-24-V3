@@ -1,16 +1,13 @@
 #ifndef _AUTO_FUNCTIONS_HPP
 #define _AUTO_FUNCTIONS_HPP
 void resetMotorEncoders();
-void moveDriveMotors(int forwardPower, int turningPower);
-void moveDriveSideMotors(int leftPower, int rightPower);
+
+
 void driveStraight(double inches, double targetDegree, double maxPower, double time, double kP, double kI, double kD);
 void turn(double targetDegree, double time, double kP, double kI, double kD);
-void PTOswitcher(int i);
-void moveArm(int position);
-void turnHead(double target, double kP, double kI, double kD);
-
 extern bool cataRunner;
-void catapult();
+void driveCall(double target);
+void turnCall(double targetAngle);
 
 
 extern bool PTOvar;

@@ -6,13 +6,13 @@
 #include "timer.hpp"
 #include <sys/_stdint.h>
 #include "lemlib/api.hpp"
-//e
-Motor lMotor1(6);
-Motor lMotor2(7);
-Motor ltMotor(1);
-Motor rMotor1(-8);
-Motor rMotor2(-9);
-Motor rtMotor(-10);
+// e
+Motor lMotor1(6, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor lMotor2(7, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor ltMotor(1, MOTOR_GEAR_BLUE, true);
+Motor rMotor1(8, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor2(9, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rtMotor(10, MOTOR_GEAR_BLUE, false);
 
 Motor intMotor(-11);
 Motor cataMotor(-16);
@@ -39,25 +39,28 @@ Controller master(E_CONTROLLER_MASTER);
  * "I was pressed!" and nothing.
  */
 
-
-
-int position = 4;
-
+int position = -1;
 void liftThread()
 {
 	while (true)
 	{
 		pros::delay(10);
-		moveArm(position);
+		if (position != -1) {
+			lifter(position);
+		}
 	}
 }
 
-void on_center_button() {
+void on_center_button()
+{
 	static bool pressed = false;
 	pressed = !pressed;
-	if (pressed) {
+	if (pressed)
+	{
 		pros::lcd::set_text(2, "I was pressed!");
-	} else {
+	}
+	else
+	{
 		pros::lcd::clear_line(2);
 	}
 }
@@ -68,20 +71,24 @@ void on_center_button() {
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize() {
+void initialize()
+{
+	ptoSwitcher(DRIVE);
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
-
 	pros::lcd::register_btn1_cb(on_center_button);
 	Task cataTask(catapult);
 	Task armTask(liftThread);
 	gyro.reset();
-	delay(2000); 
+	delay(2000);
 	pros::Distance catapultLoadDist(12);
 	rMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	rMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	lMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	cataMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    gyro.tare_rotation();
+	
 }
 
 /**
@@ -113,14 +120,19 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {
-	intMotor = 127; 
-	driveStraight(10, 0, 100, 5000, 1, 0, 0);
-	//turn(-90, 10000, 1, 0, 10); 
+void autonomous()
+{
+	/*
+	intMotor = 127;
+	//driveStraight(10, 0, 100, 5000, 1, 0, 0);
+	// turn(-90, 10000, 1, 0, 10);
 	intMotor = 0;
+	*/
+	// pros::screen::print(TEXT_MEDIUM, 6, "x: %i", gyro);
+	driveCall(24);
+	delay(1500);
+	driveCall(-24);
 
-
-	//pros::screen::print(TEXT_MEDIUM, 6, "x: %i", gyro);
 }
 
 /**
@@ -136,65 +148,67 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-void opcontrol() {
+void opcontrol()
+{
 	int x;
 	int y;
 	bool toggle = 0;
 	bool toggleWing = 0;
 	bool toggleBack = 0;
 	bool toggleBackRight = 0;
-	PTOvar=false;
+	PTOvar = false;
 	cataRunner = false;
 	int iter = 0;
-	while (gyro.is_calibrating()){
+	while (gyro.is_calibrating())
+	{
 		pros::screen::print(TEXT_MEDIUM, 7, "gyro calibrating... %d/n", iter);
 		iter += 10;
 		pros::delay(10);
 	}
 
-
-	while (true) {
+	while (true)
+	{
 		x = master.get_analog(ANALOG_RIGHT_X);
 		y = master.get_analog(ANALOG_LEFT_Y);
-		moveDriveMotors(-y,x);
+		moveDriveMotors(y, x);
 		pros::screen::print(TEXT_MEDIUM, 2, "x: %i", x);
 		pros::screen::print(TEXT_MEDIUM, 3, "x: %i", y);
 		pros::screen::print(TEXT_MEDIUM, 4, "cata: %i", cataRunner);
-		
+
 		pros::screen::print(TEXT_MEDIUM, 5, "gyro heading: %f", gyro.get_heading());
 		pros::screen::print(TEXT_MEDIUM, 6, "gyro rotation: %f", gyro.get_rotation());
-		//pros::screen::print(TEXT_MEDIUM, 5, "dist: %i", catapultLoadDist.get());
+		// pros::screen::print(TEXT_MEDIUM, 5, "dist: %i", catapultLoadDist.get());
 
-		if (master.get_digital_new_press(DIGITAL_Y) == 1){
+		if (master.get_digital_new_press(DIGITAL_Y) == 1)
+		{
 			ratchPiston.set_value(0);
 			position = 1;
 			backRight.set_value(1);
-
 		}
-		// if (master.get_digital_new_press(DIGITAL_UP) == 1){
-		// 	ratchPiston.set_value(1);
-		// }
-		else if(master.get_analog(ANALOG_RIGHT_Y) <= -96) {
-			ratchPiston.set_value(1);
+		else if (master.get_analog(ANALOG_RIGHT_Y) <= -96)
+		{
 			position = 0;
 			backRight.set_value(0);
 		}
-		else if(master.get_digital_new_press(DIGITAL_RIGHT) == 1){
+		else if (master.get_digital_new_press(DIGITAL_RIGHT) == 1)
+		{
 			ratchPiston.set_value(0);
 			position = 2;
 		}
 
-		if (master.get_digital_new_press(DIGITAL_X) == 1){
+		if (master.get_digital_new_press(DIGITAL_X) == 1)
+		{
 			toggle = !toggle;
 			intakePiston.set_value(toggle);
-			
 		}
-		if (master.get_digital_new_press(DIGITAL_R1) == 1){
+		if (master.get_digital_new_press(DIGITAL_R1) == 1)
+		{
 			toggleWing = !toggleWing;
 			wingsSolenoid2.set_value(toggleWing);
 			wingsSolenoid.set_value(toggleWing);
 		}
-		if (master.get_digital_new_press(DIGITAL_R2) == 1){
+		if (master.get_digital_new_press(DIGITAL_R2) == 1)
+		{
 			toggleBack = !toggleBack;
 			startTimer(5);
 			backRight.set_value(toggleBack);
@@ -205,23 +219,28 @@ void opcontrol() {
 		// 	backRight.set_value(1);
 		// }
 
-		if (master.get_digital(DIGITAL_UP) == 1){
+		if (master.get_digital(DIGITAL_UP) == 1)
+		{
 			cataRunner = true;
 		}
-		else{
+		else
+		{
 			cataRunner = false;
 		}
-		if(master.get_digital(DIGITAL_L1) == 1){
+		if (master.get_digital(DIGITAL_L1) == 1)
+		{
 			intMotor = 127;
 		}
-		else if(master.get_digital(DIGITAL_L2) == 1){
+		else if (master.get_digital(DIGITAL_L2) == 1)
+		{
 			intMotor = -127;
 		}
-		else {
-			intMotor= 0;
+		else
+		{
+			intMotor.brake();
 		}
-		//hold r2 = 1 side down, let go is back up
-		//press r2 once = both down with toggle back up
+		// hold r2 = 1 side down, let go is back up
+		// press r2 once = both down with toggle back up
 		/*if (master.get_digital_new_press(DIGITAL_R1) == 1){
 			toggleWing = !toggleWing;
 			wingsSolenoid2.set_value(toggle);
@@ -231,9 +250,9 @@ void opcontrol() {
 		/*if (master.get_digital_new_press(DIGITAL_X) == 1){
 			toggle = !toggle;
 			intakePiston.set_value(toggle);
-			
+
 		}*/
-		
+
 		/*
 		if (master.get_digital_new_press(DIGITAL_UP) == 1){
 			PTOswitcher(1);

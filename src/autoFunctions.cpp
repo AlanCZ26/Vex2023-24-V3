@@ -1,24 +1,15 @@
 #include "main.h"
 #include "pros/llemu.hpp"
 #include "pros/screen.h"
-bool PTOvar = false;
+bool PTOvar = false;//no drive when false
 bool infiniteCata;
 bool autoCata;
 bool shootCommand;
 bool liftVar;
 bool cataRunner;
 
-
-void PTOswitcher(int i){
-    if (i == 1){
-        PTOpiston.set_value(1);
-    }     
-    else{
-        PTOpiston.set_value(0);
-    }
-}
-
-void resetMotorEncoders(){
+void resetMotorEncoders()
+{
     rMotor1.tare_position();
     rMotor2.tare_position();
     lMotor1.tare_position();
@@ -26,84 +17,65 @@ void resetMotorEncoders(){
     rtMotor.tare_position();
     ltMotor.tare_position();
 }
-void moveDriveMotors(int forwardPower, int turningPower){
-    rMotor1 = forwardPower + turningPower; 
-    rMotor2 = forwardPower + turningPower; 
-    lMotor1 = forwardPower - turningPower; 
-    lMotor2 = forwardPower - turningPower; 
-    //This is for PTO
-    if(PTOvar == true){
-        ltMotor = forwardPower - turningPower;
-        rtMotor = forwardPower + turningPower;
-    }
-    else{
 
-    }
-}
-void moveDriveSideMotors(int leftPower, int rightPower){
-    rMotor1 = rightPower; 
-    rMotor2 = rightPower; 
-    lMotor1 = leftPower; 
-    lMotor2 = leftPower; 
-    //This is for PTO
-    if(PTOvar == true){
-        ltMotor = leftPower;
-        rtMotor = rightPower;
-    }
-    else{
-        ltMotor = 0;
-        rtMotor = 0;
-    }
-}
 // Drive amount of Inches
-void driveStraight(double inches, double targetDegree, double maxPower, double time, double kP, double kI, double kD){
+void driveStraight(double inches, double targetDegree, double maxPower, double time, double kP, double kI, double kD)
+{
     resetMotorEncoders();
     startTimer(0);
-    //double rPos = (rMotor1.get_position() * (3 / 5)) * 0.02836160034;
-    //double lPos = (lMotor1.get_position() * (3 / 5)) * 0.02836160034;
-    double error;
-    double integralLimit = 5; 
-    double tError;
-    double integral = 0; 
-    double derivative; 
-    double lastError;
+    double error, tError, derivative, lastError, tPower, tkP;
+    double integral = 0;
+    double integralLimit = 5;
 
+    /*
+    resetMotorEncoders();
+    startTimer(0);
+    // double rPos = (rMotor1.get_position() * (3 / 5)) * 0.02836160034;
+    // double lPos = (lMotor1.get_position() * (3 / 5)) * 0.02836160034;
+    double integralLimit = 5;
+    double integral = 0;
+    double error;
+    double tError;
+    double derivative;
+    double lastError;
     double tPower;
     double tkP;
 
-
-    //error = inches * (5.0 / 3.0) / 0.02836160034;
-    error = inches; 
-    double power = error*kP + integral*kI + derivative*kD;
+    // error = inches * (5.0 / 3.0) / 0.02836160034;
+    error = inches;
+    double power = error * kP + integral * kI + derivative * kD;
     moveDriveMotors(power, 0);
-    while(fabs(error) >= 0.1 && time >= getTime(0)){
-        //rPos = (rMotor1.get_position() * (3.0 / 5.0)) * 0.02836160034;
-        //lPos = (lMotor1.get_position() * (3.0 / 5.0)) * 0.02836160034;
+    while (fabs(error) >= 0.1 && time >= getTime(0))
+    {
+        // rPos = (rMotor1.get_position() * (3.0 / 5.0)) * 0.02836160034;
+        // lPos = (lMotor1.get_position() * (3.0 / 5.0)) * 0.02836160034;
         tError = targetDegree - gyro.get_heading();
-        error = (inches * (5.0 / 3.0) / 0.02836160034) -(((rMotor1.get_position()+rMotor1.get_position())/2)); 
-            integral += error;
+        error = (inches * (5.0 / 3.0) / 0.02836160034) - (((rMotor1.get_position() + rMotor1.get_position()) / 2));
+        integral += error;
 
         derivative = error - lastError;
         lastError = error;
-        if(inches * 0.8 <= (fabs(rMotor1.get_position()) + fabs(lMotor1.get_position()))/2){
-            power = error*kP + integral*kI + derivative*kD;
-            tPower = tError*tkP;
+        if (inches * 0.8 <= (fabs(rMotor1.get_position()) + fabs(lMotor1.get_position())) / 2)
+        {
+            power = error * kP + integral * kI + derivative * kD;
+            tPower = tError * tkP;
             moveDriveMotors(power, 0);
         }
-        else{
-            power = error*kP + derivative*kD;
-            tPower = tError*tkP;
+        else
+        {
+            power = error * kP + derivative * kD;
+            tPower = tError * tkP;
             moveDriveMotors(power, 0);
         }
         pros::screen::print(TEXT_MEDIUM, 1, "error: %d", error);
         pros::screen::print(TEXT_MEDIUM, 2, "power: %d", power);
-
     }
-    // while(fabs(error) >= 0.1 /*&& time <= getTime(0)*/){
+    /*
+    // while(fabs(error) >= 0.1 // && time <= getTime(0) ){
     //     rPos = (rMotor1.get_position() * (3.0 / 5.0)) * 0.02836160034;
     //     lPos = (lMotor1.get_position() * (3.0 / 5.0)) * 0.02836160034;
     //     tError = targetDegree - gyro.get_heading();
-    //     error = inches - (fabs(rPos) + fabs(lPos))/2; 
+    //     error = inches - (fabs(rPos) + fabs(lPos))/2;
     //     	pros::screen::print(TEXT_MEDIUM, 2, "error: %d", error);
     //         integral += error;
 
@@ -119,137 +91,99 @@ void driveStraight(double inches, double targetDegree, double maxPower, double t
     //         tPower = tError*tkP;
     //         moveDriveMotors(power, 0);
     //     }
-        
-
     // }
-    moveDriveMotors(0,0);
+
+    moveDriveMotors(0, 0);
     rMotor1.brake();
     rMotor2.brake();
     lMotor1.brake();
     lMotor2.brake();
-} 
-void turnHead(double target, double kP, double kI, double kD){
-    double error = target - gyro.get_heading();
-    double integral;
-    double integralLimit = 5;
+    */
+}
+double absoluteAngle = 0;
+/**
+ * \param target Target in inches
+ * \param time Time limit in ms
+ */
+void driveDist(double target, double time, double kP, double kI, double kD, double minVal, double intKickin, double intMax, double tkP)
+{
+    resetMotorEncoders();
+    startTimer(0);
+    double error = 10;
+    double integral = 0;
     double derivative;
-    double lastError;
-    double power;
-    double tPower;
-    while(gyro.get_heading() <= target){
-        error = target - gyro.get_heading();
-        if(error <= integralLimit){
+    double measure;
+    double prevError = error;
+    double output;
+    double errorRot;
+    double lOut;
+    double rOut;
+    double endVariable = target;
+    while (fabs(endVariable) > 0.5 && time >= getTime(0))
+    {
+        measure = (((lMotor1.get_position() + rMotor1.get_position() + lMotor2.get_position() + rMotor2.get_position())) * 0.00425424005);
+        error = target - measure;
+        if (fabs(integral) <= intMax)
             integral += error;
-        }
-        derivative = error - lastError;
-        lastError = error;
-        tPower = error*kP + integral*kI + derivative*kD;
-        moveDriveMotors(0,-tPower);
+        derivative = error - prevError;
+        prevError = error;
+
+        errorRot = (gyro.get_rotation() - absoluteAngle) * tkP;
+
+        output = (error * kP) + (integral * kI) + (derivative * kD);
+
+        lOut = (output - errorRot) * 10; // 10x bc we used volts before :P
+        rOut = (output + errorRot) * 10;
+        if (lOut > 0 && lOut < minVal)
+            lOut = minVal;
+        if (lOut < 0 && lOut > -minVal)
+            lOut = -minVal;
+        if (rOut > 0 && rOut < minVal)
+            rOut = minVal;
+        if (rOut < 0 && rOut > -minVal)
+            rOut = -minVal;
+
+        moveDriveSideMotors(lOut, rOut);
+        pros::screen::print(TEXT_MEDIUM, 1, "error: %f", error);
+        pros::screen::print(TEXT_MEDIUM, 2, "power: %f", lOut);
+        pros::screen::print(TEXT_MEDIUM, 3, "enc: %f", lMotor1.get_position());
+        pros::delay(10);
+        endVariable = (endVariable * 9 + error)/10;
     }
     moveDriveMotors(0, 0);
+    pros::delay(10);
+    pros::screen::print(TEXT_MEDIUM, 1, "-end-");
 }
-void turn(double targetDegree, double time, double kP, double kI, double kD){
-    gyro.tare_rotation();
+
+void driveCall(double target)
+{
+    driveDist(target, 10000, 1, 0, 1, 1, 0, 5, 0.5);
+}
+
+void turnCall(double targetAngle)
+{
+    turn(targetAngle, 10000, 1, 0, 10);
+}
+
+void turn(double targetDegree, double time, double kP, double kI, double kD)
+{
+    absoluteAngle += targetDegree;
+    targetDegree = absoluteAngle;
     double error = targetDegree - gyro.get_rotation();
-    double integral;
     double integralLimit = 5;
-    double derivative;
-    double lastError;
-    double power;
-    double tPower;
-    startTimer(0); 
-    while (fabs(error) >= 1 && time >= getTime(0)){
+    double integral, derivative, lastError, power, tPower;
+    startTimer(0);
+    while (fabs(error) >= 1 && time >= getTime(0))
+    {
         error = targetDegree - gyro.get_rotation();
-        if(error <= integralLimit){
+        if (error <= integralLimit)
             integral += error;
-        }
         derivative = error - lastError;
         lastError = error;
-        tPower = error*kP + integral*kI + derivative*kD;
-        moveDriveMotors(0,tPower);
+        tPower = error * kP + integral * kI + derivative * kD;
+        moveDriveMotors(0, tPower);
     }
-    moveDriveMotors(0,0);
-    pros::screen::print(TEXT_MEDIUM, 1, "Rotation: %f", gyro.get_rotation());
-    pros::screen::print(TEXT_MEDIUM, 2, "Derivative: %f", derivative*kD);
-    pros::screen::print(TEXT_MEDIUM, 3, "Error: %f", error*kP);
-
-}
-
-void moveArm(int position){
-    if(position == 1){
-        PTOvar = false;
-        PTOpiston.set_value(0);
-        ratchPiston.set_value(0);
-        while(liftSens.get_position() <= 9900){
-            rtMotor = 127;
-            ltMotor = 127;
-            pros::delay(10);
-        }
-            rtMotor = 0;
-            ltMotor = 0;
-    }
-    else if(position == 0){
-        while(liftSens.get_position() >= 900){
-            startTimer(1);
-            if(liftSens.get_position() >= 900 && getTime(1) > 3){
-                rtMotor = 0;
-                ltMotor = 0;
-            }
-            else{
-                rtMotor = -127;
-                ltMotor = -127;
-            }
-            pros::delay(10);
-        }
-            rtMotor = 0;
-            ltMotor = 0;
-            PTOpiston.set_value(1);
-            PTOvar = true;
-    }
-    else if(position == 2){
-        PTOvar = false;
-        PTOpiston.set_value(0);
-        ratchPiston.set_value(0);
-        while(liftSens.get_position() <= 5000){
-            rtMotor = 127;
-            ltMotor= 127;
-            pros::delay(10);
-        }
-            rtMotor = 0;
-            ltMotor = 0;
-    }
- 
-}
-void catapult()
-{
-    /*
-    if (!controller.get_digital(E_CONTROLLER_DIGITAL_X))
-    {
-        pros::delay(50);
-    }
-    */
-   
-
-    delay(200);
-    while(true){
-        if(cataRunner == true){
-            cataMotor = 127;
-
-        }
-        // else{
-        //     cataMotor = 0;
-        // }
-    
-        else if (cataRot.get_position() <= 12400 && cataRunner == false)
-        {
-           cataMotor = 127;
-
-          delay(10);
-        }
-        else {
-            cataMotor = 0;
-        }
-    }
+    moveDriveMotors(0, 0);
 }
 
 // void catapult():
@@ -257,9 +191,9 @@ void catapult()
 //         delay(100)
 //         if (infiniteCata == false){
 //             cataMotor.break()
-//         } 
-//         if (controller.buttonUp.pressing() 
-//             or (cataDist.object_distance(MM) < 50 and autoCata == True) 
+//         }
+//         if (controller.buttonUp.pressing()
+//             or (cataDist.object_distance(MM) < 50 and autoCata == True)
 //             or (shootCommand)
 //             or (autoCata == True and stallVariable > 100)):
 //             #if not controller.buttonX.pressing(): wait(0.05,SECONDS)
@@ -299,7 +233,7 @@ void drive(int lInput, int rInput){
         rMotor2.brake();
         if (PTOvar == false){
             rtMotor.brake()
-        }     
+        }
     }
     else {
         lMotor1 = lInput;
@@ -310,7 +244,7 @@ void drive(int lInput, int rInput){
             ltMotor = lInput;
             rtMotor = rInput;
         }
-    }   
+    }
 }
 void PTOswitcher(bool i){
     if (i){
@@ -319,7 +253,7 @@ void PTOswitcher(bool i){
         ltMotor.brake();
         rtMotor.brake();
     }
-        
+
     else {
         PTOvar = 1;
         PTOpiston = false;
@@ -366,8 +300,8 @@ void catapult(){
             }
             stallVariable = 0
         }
-            
-    }       
+
+    }
 }
 void lifter(){
     while (true){
@@ -392,7 +326,7 @@ void lifter(){
                 liftVar = 0
                 autoCata = true
             }
-            
+
         else if (controller.axis2.position() < -96 or liftVar == 2){
             autoCata = False
             PTOmotors(-12);
@@ -401,14 +335,14 @@ void lifter(){
             setDriveStopping();
             i = 0;
         }
-                 
+
             while ((liftSens.position() % 360) > 10 && i < 30){
                 delay(100);
                 i+=1;
                 if (i >=25){
                     ratchPiston = true;
                 }
-            } 
+            }
             delay(50);
             PTOmotors(0);
             PTOswitcher(true);
@@ -431,7 +365,7 @@ void lifter(){
             PTOmotors(0)
             liftVar = 0
     }
-        
+
 }
 void driveInches(int lInput, int rInput, int lSpd, int rSpd){
 
