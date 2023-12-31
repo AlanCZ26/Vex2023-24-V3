@@ -8,7 +8,7 @@ void moveDriveSideMotors(int leftPower, int rightPower)
     rMotor2 = rightPower;
     lMotor1 = leftPower;
     lMotor2 = leftPower;
-    if (PTOvar == true)
+    if (PTOvar == DRIVE)
     {
         ltMotor = leftPower;
         rtMotor = rightPower;
@@ -17,30 +17,31 @@ void moveDriveSideMotors(int leftPower, int rightPower)
 
 void moveDriveMotors(int forwardPower, int turningPower)
 {
-    /*
-    if (forwardPower == turningPower == 0)
+    
+    if (forwardPower == 0 && turningPower == 0)
     {
         rMotor1.brake();
         rMotor2.brake();
         lMotor1.brake();
         lMotor2.brake();
-        if (PTOvar == true)
+        if (PTOvar == DRIVE)
         {
             ltMotor.brake();
             rtMotor.brake();
         }
     }
-    */
+    else {
+        rMotor1 = forwardPower - turningPower;
+        rMotor2 = forwardPower - turningPower;
+        lMotor1 = forwardPower + turningPower;
+        lMotor2 = forwardPower + turningPower;
+        if (PTOvar == DRIVE)
+        {
+            rtMotor = forwardPower - turningPower;
+            ltMotor = forwardPower + turningPower;
+        }        
+    }    
 
-    rMotor1 = forwardPower - turningPower;
-    rMotor2 = forwardPower - turningPower;
-    lMotor1 = forwardPower + turningPower;
-    lMotor2 = forwardPower + turningPower;
-    if (PTOvar == true)
-    {
-        ltMotor = forwardPower + turningPower;
-        rtMotor = forwardPower - turningPower;
-    }
 }
 
 void ptoSwitcher(int i)
@@ -68,8 +69,8 @@ void lifter(int position)
     {
         ptoSwitcher(PTO);
         startTimer(1);
-        rtMotor = 127;
-        ltMotor = 127;
+        rtMotor = -127;
+        ltMotor = -127;
         while (liftSens.get_position() <= 9900 && getTime(1) < 3000)
         {
             pros::delay(10);
@@ -81,8 +82,8 @@ void lifter(int position)
     else if (position == 0 && heldPosition != 0) // down
     {
         startTimer(1);
-        rtMotor = -127;
-        ltMotor = -127;
+        rtMotor = 127;
+        ltMotor = 127;
         while (liftSens.get_position() >= 900 && getTime(1) < 3000)
         {
             pros::delay(10);
@@ -99,10 +100,10 @@ void lifter(int position)
     else if (position == 2 && heldPosition != 2) // middle
     {
         ptoSwitcher(PTO);
-        while (liftSens.get_position() <= 5000)
+        while (liftSens.get_position() <= 3000)
         {
-            rtMotor = 127;
-            ltMotor = 127;
+            rtMotor = -127;
+            ltMotor = -127;
             pros::delay(10);
         }
         rtMotor = 0;

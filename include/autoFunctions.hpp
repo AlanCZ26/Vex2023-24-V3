@@ -2,9 +2,7 @@
 #define _AUTO_FUNCTIONS_HPP
 void resetMotorEncoders();
 
-
-void driveStraight(double inches, double targetDegree, double maxPower, double time, double kP, double kI, double kD);
-void turn(double targetDegree, double time, double kP, double kI, double kD);
+void turn(double targetDegree, double time, double kP, double kI, double kD, double integralKickin, double minVal);
 extern bool cataRunner;
 void driveCall(double target);
 void turnCall(double targetAngle);

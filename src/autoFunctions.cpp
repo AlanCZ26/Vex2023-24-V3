@@ -18,94 +18,12 @@ void resetMotorEncoders()
     ltMotor.tare_position();
 }
 
-// Drive amount of Inches
-void driveStraight(double inches, double targetDegree, double maxPower, double time, double kP, double kI, double kD)
-{
-    resetMotorEncoders();
-    startTimer(0);
-    double error, tError, derivative, lastError, tPower, tkP;
-    double integral = 0;
-    double integralLimit = 5;
-
-    /*
-    resetMotorEncoders();
-    startTimer(0);
-    // double rPos = (rMotor1.get_position() * (3 / 5)) * 0.02836160034;
-    // double lPos = (lMotor1.get_position() * (3 / 5)) * 0.02836160034;
-    double integralLimit = 5;
-    double integral = 0;
-    double error;
-    double tError;
-    double derivative;
-    double lastError;
-    double tPower;
-    double tkP;
-
-    // error = inches * (5.0 / 3.0) / 0.02836160034;
-    error = inches;
-    double power = error * kP + integral * kI + derivative * kD;
-    moveDriveMotors(power, 0);
-    while (fabs(error) >= 0.1 && time >= getTime(0))
-    {
-        // rPos = (rMotor1.get_position() * (3.0 / 5.0)) * 0.02836160034;
-        // lPos = (lMotor1.get_position() * (3.0 / 5.0)) * 0.02836160034;
-        tError = targetDegree - gyro.get_heading();
-        error = (inches * (5.0 / 3.0) / 0.02836160034) - (((rMotor1.get_position() + rMotor1.get_position()) / 2));
-        integral += error;
-
-        derivative = error - lastError;
-        lastError = error;
-        if (inches * 0.8 <= (fabs(rMotor1.get_position()) + fabs(lMotor1.get_position())) / 2)
-        {
-            power = error * kP + integral * kI + derivative * kD;
-            tPower = tError * tkP;
-            moveDriveMotors(power, 0);
-        }
-        else
-        {
-            power = error * kP + derivative * kD;
-            tPower = tError * tkP;
-            moveDriveMotors(power, 0);
-        }
-        pros::screen::print(TEXT_MEDIUM, 1, "error: %d", error);
-        pros::screen::print(TEXT_MEDIUM, 2, "power: %d", power);
-    }
-    /*
-    // while(fabs(error) >= 0.1 // && time <= getTime(0) ){
-    //     rPos = (rMotor1.get_position() * (3.0 / 5.0)) * 0.02836160034;
-    //     lPos = (lMotor1.get_position() * (3.0 / 5.0)) * 0.02836160034;
-    //     tError = targetDegree - gyro.get_heading();
-    //     error = inches - (fabs(rPos) + fabs(lPos))/2;
-    //     	pros::screen::print(TEXT_MEDIUM, 2, "error: %d", error);
-    //         integral += error;
-
-    //     derivative = error - lastError;
-    //     lastError = error;
-    //     if(inches * 0.8 <= (fabs(rPos) + fabs(lPos))/2){
-    //         power = error*kP + integral*kI + derivative*kD;
-    //         tPower = tError*tkP;
-    //         moveDriveMotors(power, 0);
-    //     }
-    //     else{
-    //         power = error*kP + derivative*kD;
-    //         tPower = tError*tkP;
-    //         moveDriveMotors(power, 0);
-    //     }
-    // }
-
-    moveDriveMotors(0, 0);
-    rMotor1.brake();
-    rMotor2.brake();
-    lMotor1.brake();
-    lMotor2.brake();
-    */
-}
 double absoluteAngle = 0;
 /**
  * \param target Target in inches
  * \param time Time limit in ms
  */
-void driveDist(double target, double time, double kP, double kI, double kD, double minVal, double intKickin, double intMax, double tkP)
+void driveDist(double target, double time, double kP, double kI, double kD, double minVal, double intKickin, double intMax, double tkP, double tMinVal)
 {
     resetMotorEncoders();
     startTimer(0);
@@ -118,22 +36,24 @@ void driveDist(double target, double time, double kP, double kI, double kD, doub
     double errorRot;
     double lOut;
     double rOut;
-    double endVariable = target;
+    double endVariable = fabs(target);
     while (fabs(endVariable) > 0.5 && time >= getTime(0))
     {
         measure = (((lMotor1.get_position() + rMotor1.get_position() + lMotor2.get_position() + rMotor2.get_position())) * 0.00425424005);
         error = target - measure;
         if (fabs(integral) <= intMax)
             integral += error;
-        derivative = error - prevError;
+        if (fabs(error) <= 4) 
+            derivative = error - prevError;
+        else
+            derivative = 0;
+        
         prevError = error;
 
         errorRot = (gyro.get_rotation() - absoluteAngle) * tkP;
 
         output = (error * kP) + (integral * kI) + (derivative * kD);
 
-        lOut = (output - errorRot) * 10; // 10x bc we used volts before :P
-        rOut = (output + errorRot) * 10;
         if (lOut > 0 && lOut < minVal)
             lOut = minVal;
         if (lOut < 0 && lOut > -minVal)
@@ -142,14 +62,28 @@ void driveDist(double target, double time, double kP, double kI, double kD, doub
             rOut = minVal;
         if (rOut < 0 && rOut > -minVal)
             rOut = -minVal;
+        if (errorRot > 0 && errorRot < tMinVal)
+            errorRot = tMinVal;
+        if (errorRot < 0 && errorRot > -tMinVal)
+            errorRot = -tMinVal;
+
+        lOut = (output - errorRot) * 10; // 10x bc we used volts before :P
+        rOut = (output + errorRot) * 10;            
 
         moveDriveSideMotors(lOut, rOut);
         pros::screen::print(TEXT_MEDIUM, 1, "error: %f", error);
         pros::screen::print(TEXT_MEDIUM, 2, "power: %f", lOut);
         pros::screen::print(TEXT_MEDIUM, 3, "enc: %f", lMotor1.get_position());
+        
+        //std::cout << getTime(0) << "MS  |  " << ((floorf(error*100.0))/100.0) << " Err  |  " << ((floorf(lOut*100.0))/100.0) << " Out  |  " << std::endl;
+
         pros::delay(10);
-        endVariable = (endVariable * 9 + error)/10;
+        endVariable = (endVariable * 2 + fabs(error))/3;
     }
+    if (time <= getTime(0)) std::cout <<"TIMED OUT" << std::endl;
+    else std::cout << "TOOK " << getTime(0) << "MS" << std::endl;
+    std::cout << "Ending distance: " << measure << std::endl;
+    std::cout << "--------end-------"<<std::endl;
     moveDriveMotors(0, 0);
     pros::delay(10);
     pros::screen::print(TEXT_MEDIUM, 1, "-end-");
@@ -157,33 +91,122 @@ void driveDist(double target, double time, double kP, double kI, double kD, doub
 
 void driveCall(double target)
 {
-    driveDist(target, 10000, 1, 0, 1, 1, 0, 5, 0.5);
+    double time = 2000;
+    double kP = 2;
+    double kI = 0; 
+    double kD = 7; 
+    double minVal = 2; 
+    double intKickin = 0;
+    double intMax = 5; 
+    double tkP = 0.3;
+    double tMinVal = 1;
+    if (target > 24) {
+        time = 5000;
+    }
+    if (target >36) {
+        kP = 0.5;
+    }
+    
+    driveDist(target, time, kP, kI, kD, minVal, intKickin, intMax, tkP, tMinVal);
+}
+
+void turnCallAbsolute(double target)
+{
+    absoluteAngle = target;
+    turnCall(0);
 }
 
 void turnCall(double targetAngle)
 {
-    turn(targetAngle, 10000, 1, 0, 10);
+    double time = 1500;
+    double kP = 2.5;
+    double kI = 0;
+    double kD = 12;
+    double integralKickin = 5;
+    double minVal = 14;
+    /*if (fabs(targetAngle) > 60) {
+        time = 2500;
+        kP = 4;
+        kD = 2;
+    }*/
+    if (abs(targetAngle) > 200) {
+        kP = 1.5;
+        minVal = 20;
+    }
+    turn(targetAngle, time, kP, kI, kD, integralKickin, minVal);
 }
 
-void turn(double targetDegree, double time, double kP, double kI, double kD)
+void turn(double targetDegree, double time, double kP, double kI, double kD, double integralKickin, double minVal)
 {
+    std::cout << "Starting true angle: " << gyro.get_rotation() << std::endl;
     absoluteAngle += targetDegree;
     targetDegree = absoluteAngle;
     double error = targetDegree - gyro.get_rotation();
-    double integralLimit = 5;
     double integral, derivative, lastError, power, tPower;
+    double endVariable = fabs(error);
+    std::vector<double> outputVector;
+    std::vector<double> readVector;
+    std::vector<double> pVector;
+    std::vector<double> dVector;
     startTimer(0);
-    while (fabs(error) >= 1 && time >= getTime(0))
+    while (endVariable >= 0.5 && time >= getTime(0))
     {
+        delay(10);
         error = targetDegree - gyro.get_rotation();
-        if (error <= integralLimit)
-            integral += error;
+        //if (fabs(error) <= integralKickin && fabs(integral) < (1.5 / kI))
+        //    integral += error;
         derivative = error - lastError;
         lastError = error;
         tPower = error * kP + integral * kI + derivative * kD;
+        if (tPower > 0 && tPower < minVal)
+            tPower = minVal;
+        if (tPower < 0 && tPower> -minVal)
+            tPower= -minVal;
         moveDriveMotors(0, tPower);
+        //std::cout <<getTime(0) << "ms, " << tPower << std::endl;
+        outputVector.push_back(tPower);
+        readVector.push_back(error);
+        pVector.push_back(error*kP);
+        dVector.push_back(derivative*kD);
+        endVariable = (endVariable * 4 + fabs(error))/5;
     }
     moveDriveMotors(0, 0);
+    /*
+    std::cout<<std::endl<<"Outpt"<<std::endl<<"[";
+    for (int i=0;i<outputVector.size();i++) {
+        std::cout << outputVector.at(i) <<", ";
+        delay(10);
+    }
+    std::cout<<"0]"<<std::endl;
+
+    std::cout<<std::endl<<"Input"<<std::endl<<"[";
+    for (int i=0;i<readVector.size();i++) {
+        std::cout << readVector.at(i) <<", ";
+        delay(10);
+    }
+    std::cout<<"0]"<<std::endl;
+
+    std::cout<<std::endl<<"Propr"<<std::endl<<"[";
+    for (int i=0;i<pVector.size();i++) {
+        std::cout << pVector.at(i) <<", ";
+        delay(10);
+    }
+    std::cout<<"0]"<<std::endl;
+
+    std::cout<<std::endl<<"Deriv"<<std::endl<<"[";
+    for (int i=0;i<dVector.size();i++) {
+        std::cout << dVector.at(i) <<", ";
+        delay(10);
+    }
+    std::cout<<"0]"<<std::endl;
+    */
+    if (time < getTime(0)){std::cout <<"TIMED OUT" << std::endl;}
+    else {std::cout << "TOOK " << getTime(0) << "MS" << std::endl;}
+    std::cout << "Ending true angle: " << gyro.get_rotation() << std::endl;
+    std::cout << "Ending expected angle: " << absoluteAngle << std::endl;
+    std::cout << "final integral: " << integral << std::endl;
+    std::cout << "--------end-------" << std::endl << std::endl;
+    delay(10);
 }
 
 // void catapult():

@@ -88,7 +88,7 @@ void initialize()
 	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	cataMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     gyro.tare_rotation();
-	
+	intakePiston.set_value(true);
 }
 
 /**
@@ -129,9 +129,9 @@ void autonomous()
 	intMotor = 0;
 	*/
 	// pros::screen::print(TEXT_MEDIUM, 6, "x: %i", gyro);
-	driveCall(24);
-	delay(1500);
-	driveCall(-24);
+	
+	skillsAuto();
+	//testingAuto();
 
 }
 
@@ -156,7 +156,7 @@ void opcontrol()
 	bool toggleWing = 0;
 	bool toggleBack = 0;
 	bool toggleBackRight = 0;
-	PTOvar = false;
+	bool toggleCata = 0;
 	cataRunner = false;
 	int iter = 0;
 	while (gyro.is_calibrating())
@@ -219,14 +219,16 @@ void opcontrol()
 		// 	backRight.set_value(1);
 		// }
 
-		if (master.get_digital(DIGITAL_UP) == 1)
+		if (master.get_digital_new_press(DIGITAL_UP) == 1)
 		{
-			cataRunner = true;
+			toggleCata = !toggleCata;
+			cataRunner = toggleCata;
 		}
-		else
+		if (master.get_digital_new_press(DIGITAL_DOWN) == 1)
 		{
-			cataRunner = false;
+			std::cout << "test" << std::endl;
 		}
+
 		if (master.get_digital(DIGITAL_L1) == 1)
 		{
 			intMotor = 127;

@@ -38,6 +38,7 @@
 #include "timer.hpp"
 #include "autoFunctions.hpp"
 #include "driveFunctions.hpp"
+#include "autoRoutes.hpp"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
@@ -92,9 +93,13 @@ extern Imu gyro;
 extern ADIDigitalOut PTOpiston;
 extern ADIDigitalOut wingsSolenoid2;
 extern ADIDigitalOut wingsSolenoid;
-extern ADIDigitalOut sidePiston;
+extern ADIDigitalOut backRight;
+extern ADIDigitalOut backLeft;
 extern ADIDigitalOut ratchPiston;
 extern ADIDigitalOut intakePiston;
 
 extern Controller master;
+
+extern int position;
+
 #endif  // _PROS_MAIN_H_
