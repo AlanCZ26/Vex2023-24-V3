@@ -91,7 +91,7 @@ void driveDist(double target, double time, double kP, double kI, double kD, doub
 
 void driveCall(double target)
 {
-    double time = 2000;
+    double time = 20000;
     double kP = 2;
     double kI = 0; 
     double kD = 7; 
@@ -101,10 +101,27 @@ void driveCall(double target)
     double tkP = 0.3;
     double tMinVal = 1;
     if (target > 24) {
-        time = 5000;
+        time = 50000;
     }
-    if (target >36) {
+    if (target >= 36) {
         kP = 0.5;
+        kD = 12;
+    }
+    
+    driveDist(target, time, kP, kI, kD, minVal, intKickin, intMax, tkP, tMinVal);
+}
+
+void driveCall(double target, double kP, double kD)
+{
+    double time = 20000;
+    double kI = 0; 
+    double minVal = 2; 
+    double intKickin = 0;
+    double intMax = 5; 
+    double tkP = 0.3;
+    double tMinVal = 1.5;
+    if (target > 24) {
+        time = 50000;
     }
     
     driveDist(target, time, kP, kI, kD, minVal, intKickin, intMax, tkP, tMinVal);
@@ -123,14 +140,18 @@ void turnCall(double targetAngle)
     double kI = 0;
     double kD = 12;
     double integralKickin = 5;
-    double minVal = 14;
+    double minVal = 18;
     /*if (fabs(targetAngle) > 60) {
         time = 2500;
         kP = 4;
         kD = 2;
     }*/
-    if (abs(targetAngle) > 200) {
-        kP = 1.5;
+    if (fabs(targetAngle) < 35) {
+        kP = 3;
+        minVal = 25;
+    }
+    if (fabs(targetAngle) > 200) {
+        kP = 2;
         minVal = 20;
     }
     turn(targetAngle, time, kP, kI, kD, integralKickin, minVal);
