@@ -25,6 +25,9 @@ double absoluteAngle = 0;
  */
 void driveDist(double target, double time, double kP, double kI, double kD, double minVal, double intKickin, double intMax, double tkP, double tMinVal)
 {
+    std::cout << "--------MOV-------" << std::endl;
+    std::cout <<"Starting time: " << (getTime(AUTOTIMER)) << "ms" <<std::endl;
+    std::cout << "Target: " << target << std::endl;
     resetMotorEncoders();
     startTimer(0);
     double error = 10;
@@ -67,6 +70,8 @@ void driveDist(double target, double time, double kP, double kI, double kD, doub
         if (errorRot < 0 && errorRot > -tMinVal)
             errorRot = -tMinVal;
 
+        if (output > 13) {output = 13;}
+        if (output < -13) {output = -13;}
         lOut = (output - errorRot) * 10; // 10x bc we used volts before :P
         rOut = (output + errorRot) * 10;            
 
@@ -80,10 +85,10 @@ void driveDist(double target, double time, double kP, double kI, double kD, doub
         pros::delay(10);
         endVariable = (endVariable * 2 + fabs(error))/3;
     }
-    if (time <= getTime(0)) std::cout <<"TIMED OUT" << std::endl;
+    if (time <= getTime(0)){std::cout <<"============="<<std::endl<<"  TIMED OUT" << std::endl<<"============="<<std::endl;}
     else std::cout << "TOOK " << getTime(0) << "MS" << std::endl;
     std::cout << "Ending distance: " << measure << std::endl;
-    std::cout << "--------end-------"<<std::endl;
+    std::cout << "--------END-------" << std::endl << std::endl;
     moveDriveMotors(0, 0);
     pros::delay(10);
     pros::screen::print(TEXT_MEDIUM, 1, "-end-");
@@ -91,21 +96,27 @@ void driveDist(double target, double time, double kP, double kI, double kD, doub
 
 void driveCall(double target)
 {
-    double time = 20000;
+    double time = 1000;
     double kP = 2;
     double kI = 0; 
     double kD = 7; 
     double minVal = 2; 
     double intKickin = 0;
     double intMax = 5; 
-    double tkP = 0.3;
+    double tkP = 0.5;
     double tMinVal = 1;
-    if (target > 24) {
-        time = 50000;
+    if (fabs(target)< 10) {
+        time = 800;
+        minVal = 3.5;
+        kP = 2.5;
     }
-    if (target >= 36) {
-        kP = 0.5;
-        kD = 12;
+    if (fabs(target) > 18) {
+        time = 2000;
+    }
+    if (fabs(target) >= 36) {
+        time = 4000;
+        kP = 2;
+        kD = 7;
     }
     
     driveDist(target, time, kP, kI, kD, minVal, intKickin, intMax, tkP, tMinVal);
@@ -113,17 +124,16 @@ void driveCall(double target)
 
 void driveCall(double target, double kP, double kD)
 {
-    double time = 20000;
+    double time = 1000;
     double kI = 0; 
-    double minVal = 2; 
+    double minVal = 2.5; 
     double intKickin = 0;
     double intMax = 5; 
-    double tkP = 0.3;
+    double tkP = kP/6;
     double tMinVal = 1.5;
-    if (target > 24) {
-        time = 50000;
+    if (fabs(target) > 24) {
+        time = 1500;
     }
-    
     driveDist(target, time, kP, kI, kD, minVal, intKickin, intMax, tkP, tMinVal);
 }
 
@@ -147,11 +157,11 @@ void turnCall(double targetAngle)
         kD = 2;
     }*/
     if (fabs(targetAngle) < 35) {
-        kP = 3;
+        kP = 2.7;
         minVal = 25;
     }
     if (fabs(targetAngle) > 200) {
-        kP = 2;
+        time = 2300;
         minVal = 20;
     }
     turn(targetAngle, time, kP, kI, kD, integralKickin, minVal);
@@ -159,7 +169,10 @@ void turnCall(double targetAngle)
 
 void turn(double targetDegree, double time, double kP, double kI, double kD, double integralKickin, double minVal)
 {
+    std::cout << "--------TRN-------" << std::endl;
+    std::cout <<"Starting time: " << (getTime(AUTOTIMER)) << "ms" <<std::endl;
     std::cout << "Starting true angle: " << gyro.get_rotation() << std::endl;
+    std::cout << "Target: " << targetDegree << std::endl;
     absoluteAngle += targetDegree;
     targetDegree = absoluteAngle;
     double error = targetDegree - gyro.get_rotation();
@@ -170,7 +183,7 @@ void turn(double targetDegree, double time, double kP, double kI, double kD, dou
     std::vector<double> pVector;
     std::vector<double> dVector;
     startTimer(0);
-    while (endVariable >= 0.5 && time >= getTime(0))
+    while (endVariable >= 1 && time >= getTime(0))
     {
         delay(10);
         error = targetDegree - gyro.get_rotation();
@@ -221,12 +234,11 @@ void turn(double targetDegree, double time, double kP, double kI, double kD, dou
     }
     std::cout<<"0]"<<std::endl;
     */
-    if (time < getTime(0)){std::cout <<"TIMED OUT" << std::endl;}
+    if (time < getTime(0)){std::cout <<"   ============="<<std::endl<<"     TIMED OUT" << std::endl<<"     ("<<getTime(0)<<"ms)"<<std::endl<<"   ============="<<std::endl;}
     else {std::cout << "TOOK " << getTime(0) << "MS" << std::endl;}
     std::cout << "Ending true angle: " << gyro.get_rotation() << std::endl;
     std::cout << "Ending expected angle: " << absoluteAngle << std::endl;
-    std::cout << "final integral: " << integral << std::endl;
-    std::cout << "--------end-------" << std::endl << std::endl;
+    std::cout << "--------END-------" << std::endl << std::endl;
     delay(10);
 }
 

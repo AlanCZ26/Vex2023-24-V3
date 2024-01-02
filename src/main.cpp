@@ -120,6 +120,7 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
+int AUTOTIMER = 4;
 void autonomous()
 {
 	/*
@@ -129,7 +130,8 @@ void autonomous()
 	intMotor = 0;
 	*/
 	// pros::screen::print(TEXT_MEDIUM, 6, "x: %i", gyro);
-	
+	AUTOTIMER = 4;
+	startTimer(AUTOTIMER);
 	skillsAuto();
 	//testingAuto();
 
@@ -152,7 +154,7 @@ void opcontrol()
 {
 	int x;
 	int y;
-	bool toggle = 0;
+	bool toggle = 1;
 	bool toggleWing = 0;
 	bool toggleBack = 0;
 	bool toggleBackRight = 0;
@@ -178,6 +180,14 @@ void opcontrol()
 		pros::screen::print(TEXT_MEDIUM, 5, "gyro heading: %f", gyro.get_heading());
 		pros::screen::print(TEXT_MEDIUM, 6, "gyro rotation: %f", gyro.get_rotation());
 		// pros::screen::print(TEXT_MEDIUM, 5, "dist: %i", catapultLoadDist.get());
+		if (!master.get_digital(DIGITAL_LEFT)) {
+			pros::screen::print(TEXT_MEDIUM, 8, "l1: %f", lMotor1.get_actual_velocity());
+			pros::screen::print(TEXT_MEDIUM, 9, "l2: %f", lMotor2.get_actual_velocity());
+			pros::screen::print(TEXT_MEDIUM, 10, "lT: %f", ltMotor.get_actual_velocity());
+			pros::screen::print(TEXT_MEDIUM, 11, "r1: %f", rMotor1.get_actual_velocity());
+			pros::screen::print(TEXT_MEDIUM, 12, "r2: %f", rMotor2.get_actual_velocity());
+			pros::screen::print(TEXT_MEDIUM, 13, "rT: %f", rtMotor.get_actual_velocity());
+		}
 
 		if (master.get_digital_new_press(DIGITAL_Y) == 1)
 		{

@@ -115,27 +115,20 @@ void lifter(int position)
 
 void catapult()
 {
-    /*
-    if (!controller.get_digital(E_CONTROLLER_DIGITAL_X))
-    {
-        pros::delay(50);
-    }
-    */
-
     delay(200);
     while (true)
     {
-        if (cataRunner == true)
+        if (cataRunner == true
+        || (autoCata == true && cataDist.get() <= 50))
         {
             cataMotor = 127;
-            delay(300);
+            delay(200);
         }
         else if (cataRot.get_position() <= 12400 && cataRunner == false)
         {
             cataMotor = 127;
             delay(10);
         }
-        else
-            cataMotor.brake();
+        else cataMotor.brake();
     }
 }

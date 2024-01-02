@@ -4,9 +4,11 @@ void resetMotorEncoders();
 
 void turn(double targetDegree, double time, double kP, double kI, double kD, double integralKickin, double minVal);
 extern bool cataRunner;
+extern bool autoCata;
 void driveCall(double target);
 void driveCall(double target, double kP, double kD);
 void turnCall(double targetAngle);
+void turnCallAbsolute(double targetAngle);
 
 
 extern bool PTOvar;
