@@ -167,7 +167,7 @@ void opcontrol()
 		iter += 10;
 		pros::delay(10);
 	}
-
+	skillsDriverMacro();
 	while (true)
 	{
 		x = master.get_analog(ANALOG_RIGHT_X);
@@ -198,7 +198,6 @@ void opcontrol()
 		else if (master.get_analog(ANALOG_RIGHT_Y) <= -96)
 		{
 			position = 0;
-			backRight.set_value(0);
 		}
 		else if (master.get_digital_new_press(DIGITAL_RIGHT) == 1)
 		{

@@ -85,7 +85,7 @@ void driveDist(double target, double time, double kP, double kI, double kD, doub
         pros::delay(10);
         endVariable = (endVariable * 2 + fabs(error))/3;
     }
-    if (time <= getTime(0)){std::cout <<"============="<<std::endl<<"  TIMED OUT" << std::endl<<"============="<<std::endl;}
+    if (time < getTime(0)){std::cout <<"   ============="<<std::endl<<"     TIMED OUT" << std::endl<<"     ("<<getTime(0)<<"ms)"<<std::endl<<"   ============="<<std::endl;}
     else std::cout << "TOOK " << getTime(0) << "MS" << std::endl;
     std::cout << "Ending distance: " << measure << std::endl;
     std::cout << "--------END-------" << std::endl << std::endl;
@@ -96,7 +96,7 @@ void driveDist(double target, double time, double kP, double kI, double kD, doub
 
 void driveCall(double target)
 {
-    double time = 1000;
+    double time = 800;
     double kP = 2;
     double kI = 0; 
     double kD = 7; 
@@ -105,18 +105,29 @@ void driveCall(double target)
     double intMax = 5; 
     double tkP = 0.5;
     double tMinVal = 1;
+    
     if (fabs(target)< 10) {
-        time = 800;
+        time = 600;
         minVal = 3.5;
         kP = 2.5;
     }
+    if (fabs(target)<5) {
+        minVal = 4;
+        kP = 3.5;
+    }
     if (fabs(target) > 18) {
-        time = 2000;
+        time = 1000;
     }
     if (fabs(target) >= 36) {
-        time = 4000;
+        time = 1600;
         kP = 2;
         kD = 7;
+    }
+    if (fabs(target>=48)){
+        time = 2000;
+    }
+    if (fabs(target)>60) {
+        time = 3000;
     }
     
     driveDist(target, time, kP, kI, kD, minVal, intKickin, intMax, tkP, tMinVal);
@@ -145,7 +156,7 @@ void turnCallAbsolute(double target)
 
 void turnCall(double targetAngle)
 {
-    double time = 1500;
+    double time = 1000;
     double kP = 2.5;
     double kI = 0;
     double kD = 12;
@@ -159,6 +170,9 @@ void turnCall(double targetAngle)
     if (fabs(targetAngle) < 35) {
         kP = 2.7;
         minVal = 25;
+    }
+    if (fabs(targetAngle > 100)){
+        time = 1500;
     }
     if (fabs(targetAngle) > 200) {
         time = 2300;

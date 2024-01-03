@@ -20,6 +20,7 @@ void testingAuto() {
 }
 
 void skillsAuto() {
+    ///*
     intakePiston.set_value(false);
     cataRunner = true;
     intMotor = 127;
@@ -35,23 +36,25 @@ void skillsAuto() {
     intMotor = -127;
     moveDriveSideMotors(100, 100);
     delay(600);
-    gyro.tare_rotation();
     moveDriveSideMotors(0, 0);
     intMotor.brake();
+
     //back off, turn
     driveCall(-12);
+    //AIM HERE -----------------
     turnCall(70);
     driveCall(3);
     //prepare to shoot
     backRight.set_value(true);
     intakePiston.set_value(false);
     //autoCata = true;
-    cataRunner = true;
+    cataMotor = 120;
+    skillsCataVariable = true;
     rMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	rMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	lMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    delay(25000); //25!! ---------
+    delay(28000); //25!! ----------------------------------
     delay(2000);
     backRight.set_value(false);
     delay(500);
@@ -59,31 +62,98 @@ void skillsAuto() {
 	rMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	lMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    cataRunner = false;
+    skillsCataVariable = false;
+    cataRunner = true;
     driveCall(15);
-    turnCallAbsolute(45);
+    cataRunner = false;
+    turnCallAbsolute(35);
     intMotor = -127;
     driveCall(41);
     turnCallAbsolute(-90);
     moveDriveMotors(-100,0);
-    delay(1200);
-    backRight.set_value(true);
-    backLeft.set_value(true);
-    driveCall(36);
+    delay(100);
+    while(fabs(gyro.get_pitch())>5) {
+        delay(10);
+    }
+    delay(1000);
+    intMotor.brake();
+    //backRight.set_value(true);
+    //backLeft.set_value(true);
+
+    //first push
+    moveDriveMotors(-85,0);
+    delay(1000);
     moveDriveMotors(100,0);
     delay(80);
-    backRight.set_value(false);
-    backLeft.set_value(false);
+
+    //recenter and leave
     turnCall(0);
     driveCall(30);
+
+    //turn and move
     turnCall(-90);
-    driveCall(-20);
-    turnCall(90);
-    moveDriveMotors(-100,0);
+    driveCall(24);
+
+    //aim and push (second)
+    turnCall(70);
     backRight.set_value(true);
-    backLeft.set_value(true);    
-    delay(1400);
+    backLeft.set_value(true);     
+    driveCall(-34.5);
+    backRight.set_value(false);
+    backLeft.set_value(false);
+
+    //leave
+    moveDriveMotors(100,0);
+    delay(80);
+    turnCall(20);
+    driveCall(30);
+    turnCall(90);
+
+    //across, aim and push (third)
+    driveCall(40);
+    turnCall(-70);
+    backRight.set_value(true);
+    backLeft.set_value(true);     
+    driveCall(-34.5);
+    backRight.set_value(false);
+    backLeft.set_value(false);
+    moveDriveMotors(100,0);
+    delay(80);
+
+    //center and leave
+    turnCall(-20);
+    driveCall(24);
+
+    //mid push (last)
+    turnCall(-90);
+    driveCall(15);
+    wingsSolenoid2.set_value(true);
+    wingsSolenoid.set_value(true);
+    turnCall(-90);
+    driveCall(28);
+
+    //center and leave
+    moveDriveMotors(100,0);
+    delay(80);
+    turnCall(0);
+    wingsSolenoid2.set_value(false);
+    wingsSolenoid.set_value(false);
+    //*/
+    driveCall(-7);
+    
+    //face edge and move
+    turnCall(90);
+    ptoSwitcher(PTO);
+    position = 1; //lift up    
+    driveCall(-60);
+    turnCall(90);
+    driveCall(38,2,12);
+    moveDriveMotors(100,0);
+    delay(300);
     moveDriveMotors(0,0);
+    position = 10;
+
+
 }
 
 void skillsAuto140()
@@ -368,3 +438,63 @@ void skillsAuto2(){
     driveCall(-24);
 
 }
+
+void skillsDriverMacro(){
+intakePiston.set_value(false);
+    cataRunner = true;
+    intMotor = 127;
+    delay(100);
+    cataRunner = false;
+    turnCall(-32);
+    intMotor.brake();
+    driveCall(20);
+    turnCall(32);
+
+    //push in
+    intakePiston.set_value(true);
+    intMotor = -127;
+    moveDriveSideMotors(100, 100);
+    delay(600);
+    gyro.tare_rotation();
+    moveDriveSideMotors(0, 0);
+    intMotor.brake();
+    //back off, turn
+    driveCall(-12);
+    turnCall(70);
+    driveCall(3);
+    //prepare to shoot
+    /*
+    intakePiston.set_value(false);
+    moveDriveSideMotors(-50, -50);
+    delay(500);
+    moveDriveSideMotors(100, 100);
+    delay(100);
+    moveDriveSideMotors(0, 0);
+    */
+    
+    backRight.set_value(true);
+    intakePiston.set_value(false);
+    //autoCata = true;
+    cataRunner = true;
+    /*moveDriveSideMotors(-50, -50);
+    delay(500);
+    moveDriveSideMotors(-20, -20);
+    delay(500);*/
+    rMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	rMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	lMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    delay(25000); //25!! ---------
+    ratchPiston.set_value(false);
+    delay(2000);
+    backRight.set_value(false);
+    delay(500);
+    rMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	rMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	lMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    //autoCata = false; 
+    cataRunner = false;
+
+}
+

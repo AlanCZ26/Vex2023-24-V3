@@ -2,7 +2,7 @@
 #define _DRIVE_FUNCTIONS_HPP
 const int DRIVE = 1;
 const int PTO = 0;
-
+extern bool skillsCataVariable;
 void moveDriveSideMotors(int leftPower, int rightPower);
 void ptoSwitcher(int i);
 /**

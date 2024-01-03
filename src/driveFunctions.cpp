@@ -68,6 +68,7 @@ void lifter(int position)
     if (position == 1 && heldPosition != 1) // up
     {
         ptoSwitcher(PTO);
+        intakePiston.set_value(false);
         startTimer(1);
         rtMotor = -127;
         ltMotor = -127;
@@ -82,15 +83,29 @@ void lifter(int position)
     else if (position == 0 && heldPosition != 0) // down
     {
         startTimer(1);
+        backRight.set_value(0);
         rtMotor = 127;
         ltMotor = 127;
-        while (liftSens.get_position() >= 900 && getTime(1) < 3000)
+        while (liftSens.get_position() >= 900 && getTime(1) < 2000)
         {
             pros::delay(10);
-            if (getTime(1) > 2000)
-            {
-                ratchPiston.set_value(1);
-            }
+            if (getTime(1) > 1500)//if it takes over 2s to go down
+            {ratchPiston.set_value(true);}
+        }
+        rtMotor = 0;
+        ltMotor = 0;
+        ptoSwitcher(DRIVE);
+        heldPosition = position;
+    }
+    else if (position == 10) // down halfway for hang
+    {
+        startTimer(1);
+        rtMotor = 127;
+        ltMotor = 127;
+        ratchPiston.set_value(true);
+        while (liftSens.get_position() >= 3200 && getTime(1) < 3000)
+        {
+            pros::delay(10);
         }
         rtMotor = 0;
         ltMotor = 0;
@@ -113,6 +128,7 @@ void lifter(int position)
     position = -1;
 }
 
+bool skillsCataVariable = false;
 void catapult()
 {
     delay(200);
@@ -121,7 +137,7 @@ void catapult()
         if (cataRunner == true
         || (autoCata == true && cataDist.get() <= 50))
         {
-            cataMotor = 127;
+            cataMotor = 127; // crutch value change back to 127
             delay(200);
         }
         else if (cataRot.get_position() <= 12400 && cataRunner == false)
@@ -129,6 +145,6 @@ void catapult()
             cataMotor = 127;
             delay(10);
         }
-        else cataMotor.brake();
+        else if (!skillsCataVariable) cataMotor.brake();
     }
 }
