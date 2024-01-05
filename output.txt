@@ -2,5 +2,200 @@ Transferring V5 to download channel
 Established terminal connection
 
 
-CçWARNING - pros.serial.terminal.terminal:stop - Stopping terminal - pros-cli version:3.4.3
-ERROR - pros.cli.common:resolve_v5_port - No v5 ports were found! If you think you have a v5 plugged in, run this command again with the --debug flag - pros-cli version:3.4.3
+
+         _+=+_
+      .-`  .  `-.          8888888b.  8888888b.   .d88888b.   .d8888b.
+   _+`     "     `+_       888   Y88b 888   Y88b d88P" "Y88b d88P  Y88b
+  \\\sssssssssssss///      888    888 888    888 888     888 Y88b.
+     .ss\  *  /ss.         888   d88P 888   d88P 888     888  "Y888b.
+ .+bm  .s  *  s.  md+.     8888888P"  8888888P"  888     888     "Y88b.
+.hMMMMs .  *  . sMMMMh.    888        888 T88b   888     888       "888
+ `\hMMMb \ | / dMMMh:      888        888  T88b  Y88b. .d88P Y88b  d88P
+   -SNMNo  -  oNMNs-       888        888   T88b  "Y88888P"   "Y8888P"
+     `+dMh\./dMd/
+        `:yNy:`                      Powered by PROS for VEX V5
+           "                Copyright (c) Purdue University ACM SIGBots
+Version:        3.8.0     Platform:  V1.1.2 (b34)     Uptime:    0.000 s
+Compiled:   Jan  4 2024 22:56:23     Directory:                        
+
+
+
+
+
+         _+=+_
+      .-`  .  `-.          8888888b.  8888888b.   .d88888b.   .d8888b.
+   _+`     "     `+_       888   Y88b 888   Y88b d88P" "Y88b d88P  Y88b
+  \\\sssssssssssss///      888    888 888    888 888     888 Y88b.
+     .ss\  *  /ss.         888   d88P 888   d88P 888     888  "Y888b.
+ .+bm  .s  *  s.  md+.     8888888P"  8888888P"  888     888     "Y88b.
+.hMMMMs .  *  . sMMMMh.    888        888 T88b   888     888       "888
+ `\hMMMb \ | / dMMMh:      888        888  T88b  Y88b. .d88P Y88b  d88P
+   -SNMNo  -  oNMNs-       888        888   T88b  "Y88888P"   "Y8888P"
+     `+dMh\./dMd/
+        `:yNy:`                      Powered by PROS for VEX V5
+           "                Copyright (c) Purdue University ACM SIGBots
+Version:        3.8.0     Platform:  V1.1.2 (b34)     Uptime:    0.000 s
+Compiled:   Jan  4 2024 22:56:23     Directory:                        
+
+
+--------MOV-------
+Starting time: 0ms
+Target: 46
+TOOK 1048MS
+Ending distance: 46.1551
+--------END-------
+
+--------MOV-------
+Starting time: 1158ms
+Target: -46
+TOOK 1040MS
+Ending distance: -46.2368
+--------END-------
+
+--------TRN-------
+Starting time: 2208ms
+Starting true angle: 12.299
+Target: 0
+TOOK 910MS
+Ending true angle: 119.672
+Ending expected angle: 120
+--------END-------
+
+--------MOV-------
+Starting time: 3328ms
+Target: -24
+   =============
+     TIMED OUT
+     (1010ms)
+   =============
+Ending distance: -23.32
+--------END-------
+
+--------TRN-------
+Starting time: 4348ms
+Starting true angle: 118.747
+Target: 0
+TOOK 650MS
+Ending true angle: 179.293
+Ending expected angle: 180
+--------END-------
+
+--------MOV-------
+Starting time: 5008ms
+Target: -18
+   =============
+     TIMED OUT
+     (810ms)
+   =============
+Ending distance: -15.7237
+--------END-------
+
+--------MOV-------
+Starting time: 5828ms
+Target: 13
+   =============
+     TIMED OUT
+     (1010ms)
+   =============
+Ending distance: 12.1961
+--------END-------
+
+--------TRN-------
+Starting time: 6848ms
+Starting true angle: 179.297
+Target: -225
+TOOK 1180MS
+Ending true angle: -44.4443
+Ending expected angle: -45
+--------END-------
+
+--------MOV-------
+Starting time: 8038ms
+Target: -12
+TOOK 460MS
+Ending distance: -11.9459
+--------END-------
+
+--------MOV-------
+Starting time: 8508ms
+Target: -10
+TOOK 410MS
+Ending distance: -9.88856
+--------END-------
+
+--------TRN-------
+Starting time: 8928ms
+Starting true angle: -44.783
+Target: -40
+TOOK 510MS
+Ending true angle: -85.1293
+Ending expected angle: -85
+--------END-------
+
+--------MOV-------
+Starting time: 9448ms
+Target: -13
+TOOK 480MS
+Ending distance: -13.0282
+--------END-------
+
+--------TRN-------
+Starting time: 9938ms
+Starting true angle: -83.9803
+Target: -5
+TOOK 260MS
+Ending true angle: -90.3723
+Ending expected angle: -90
+--------END-------
+
+--------MOV-------
+Starting time: 10208ms
+Target: -20
+TOOK 620MS
+Ending distance: -19.9609
+--------END-------
+
+--------MOV-------
+Starting time: 10838ms
+Target: 28
+TOOK 820MS
+Ending distance: 28.2158
+--------END-------
+
+--------TRN-------
+Starting time: 11668ms
+Starting true angle: -91.9158
+Target: 0
+TOOK 860MS
+Ending true angle: -0.783534
+Ending expected angle: 0
+--------END-------
+
+--------MOV-------
+Starting time: 12538ms
+Target: 22
+TOOK 630MS
+Ending distance: 22.0897
+--------END-------
+
+--------TRN-------
+Starting time: 13178ms
+Starting true angle: -0.576872
+Target: 90
+TOOK 780MS
+Ending true angle: 90.1284
+Ending expected angle: 90
+--------END-------
+
+--------MOV-------
+Starting time: 13968ms
+Target: -26
+TOOK 730MS
+Ending distance: -25.9492
+--------END-------
+
+ERROR - pros.serial.terminal.terminal:reader - Couldn't find the response header in the device response after 2.0 s. Got  but was expecting aa55 - pros-cli version:3.4.3
+  File "pros/serial/devices/vex/vex_device.py", line 115, in _txrx_packet
+  File "pros/serial/devices/vex/vex_device.py", line 75, in _rx_packet
+OSError: Couldn't find the response header in the device response after 2.0 s. Got  but was expecting aa55
+We detected something went wrong! Do you want to send a report? [y/N]: 

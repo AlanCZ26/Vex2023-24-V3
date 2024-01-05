@@ -1,13 +1,14 @@
 #ifndef _AUTO_FUNCTIONS_HPP
 #define _AUTO_FUNCTIONS_HPP
 void resetMotorEncoders();
-
+extern double absoluteAngle;
 void turn(double targetDegree, double time, double kP, double kI, double kD, double integralKickin, double minVal);
 extern bool cataRunner;
 extern bool autoCata;
 void driveCall(double target);
 void driveCall(double target, double kP, double kD);
 void turnCall(double targetAngle);
+void turnCall(double targetAngle,double kP);
 void turnCallAbsolute(double targetAngle);
 
 

@@ -180,6 +180,32 @@ void turnCall(double targetAngle)
     }
     turn(targetAngle, time, kP, kI, kD, integralKickin, minVal);
 }
+// pros terminal | tee output.txt
+void turnCall(double targetAngle, double kP)
+{
+    double time = 1000;
+    double kI = 0;
+    double kD = 12;
+    double integralKickin = 5;
+    double minVal = 18;
+    /*if (fabs(targetAngle) > 60) {
+        time = 2500;
+        kP = 4;
+        kD = 2;
+    }*/
+    if (fabs(targetAngle) < 35) {
+        kP = 2.7;
+        minVal = 25;
+    }
+    if (fabs(targetAngle > 100)){
+        time = 1500;
+    }
+    if (fabs(targetAngle) > 200) {
+        time = 2300;
+        minVal = 20;
+    }
+    turn(targetAngle, time, kP, kI, kD, integralKickin, minVal);
+}
 
 void turn(double targetDegree, double time, double kP, double kI, double kD, double integralKickin, double minVal)
 {

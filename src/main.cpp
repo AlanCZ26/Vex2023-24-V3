@@ -132,9 +132,12 @@ void autonomous()
 	// pros::screen::print(TEXT_MEDIUM, 6, "x: %i", gyro);
 	AUTOTIMER = 4;
 	startTimer(AUTOTIMER);
-	skillsAuto();
+	//skillsAuto();
 	//testingAuto();
-
+	//nearsideSafeAWP();
+	//nearsideBallrushAWP();
+	//nearSideBallrushElims();
+	farSideAuto();
 }
 
 /**
@@ -167,7 +170,8 @@ void opcontrol()
 		iter += 10;
 		pros::delay(10);
 	}
-	skillsDriverMacro();
+	//if (!master.get_digital(DIGITAL_A)){skillsDriverMacro();}
+	
 	while (true)
 	{
 		x = master.get_analog(ANALOG_RIGHT_X);
@@ -195,7 +199,7 @@ void opcontrol()
 			position = 1;
 			backRight.set_value(1);
 		}
-		else if (master.get_analog(ANALOG_RIGHT_Y) <= -96)
+		else if (master.get_analog(ANALOG_RIGHT_Y) <= -110)
 		{
 			position = 0;
 		}
@@ -215,6 +219,11 @@ void opcontrol()
 			toggleWing = !toggleWing;
 			wingsSolenoid2.set_value(toggleWing);
 			wingsSolenoid.set_value(toggleWing);
+			if (toggleWing&&toggleBack) {
+				toggleBack = false;
+				backLeft.set_value(false);
+				backRight.set_value(false);
+			}
 		}
 		if (master.get_digital_new_press(DIGITAL_R2) == 1)
 		{
@@ -222,6 +231,11 @@ void opcontrol()
 			startTimer(5);
 			backRight.set_value(toggleBack);
 			backLeft.set_value(toggleBack);
+			if (toggleWing&&toggleBack) {
+				toggleWing = false;
+				wingsSolenoid2.set_value(false);
+				wingsSolenoid.set_value(false);
+			}
 		}
 		// else if(getTime(5) >= 2 && master.get_digital(DIGITAL_R2)){
 		// 	backLeft.set_value(1);

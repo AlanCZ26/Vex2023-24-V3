@@ -34,7 +34,166 @@ void skillsAuto() {
     //push in
     intakePiston.set_value(true);
     intMotor = -127;
-    moveDriveSideMotors(100, 100);
+    moveDriveSideMotors(127, 127);
+    delay(600);
+    moveDriveSideMotors(0, 0);
+    intMotor.brake();
+
+    //back off, turn
+    driveCall(-12);
+    //AIM HERE -----------------
+    turnCall(72.5);
+    driveCall(3);
+    //prepare to shoot
+    backRight.set_value(true);
+    intakePiston.set_value(false);
+    //autoCata = true;
+    cataRunner = true;
+    rMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	rMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	lMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    delay(25000); //25!! ----------------------------------
+    delay(2000);
+    backRight.set_value(false);
+    delay(500);
+    rMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	rMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	lMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    intMotor = -127;
+    cataRunner = true;
+    driveCall(15);
+    cataRunner = false;
+    turnCallAbsolute(35);
+    driveCall(41);
+    turnCallAbsolute(-90);
+
+    //over the bar
+    moveDriveMotors(-127,0);
+    //delay(1200);
+    startTimer(3);
+    while (fabs(gyro.get_roll())<=5&&getTime(3)<1600){
+        delay(10);
+    }
+    std::cout<<"OVER 5 ROLL"<<std::endl;
+    while (fabs(gyro.get_roll())>5&&getTime(3)<1600){
+        delay(10);
+    }
+    std::cout<<"UNDER 5 ROLL"<<std::endl;
+    while (fabs(gyro.get_roll())<=5&&getTime(3)<1600){
+        delay(10);
+    }
+    std::cout<<"OVER 5 ROLL"<<std::endl;
+    while (fabs(gyro.get_roll())>5&&getTime(3)<1600){
+        delay(10);
+    }
+    std::cout<<"UNDER 5 ROLL"<<std::endl;
+    delay(100);
+    intMotor.brake();
+    moveDriveMotors(100,0);
+    delay(700);
+    gyro.set_rotation(-90);
+    delay(100);
+    //backRight.set_value(true);
+    //backLeft.set_value(true);
+
+    //first push
+    moveDriveMotors(-60,0);
+    delay(1650);
+    moveDriveMotors(100,0);
+    delay(80);
+
+    //recenter and leave
+    turnCall(0);
+    driveCall(30);
+
+    //turn and move
+    turnCall(-90);
+    driveCall(28);
+
+    //aim and push (second)
+    turnCall(65);
+    backRight.set_value(true);
+    backLeft.set_value(true);     
+    driveCall(-34.5);
+    backRight.set_value(false);
+    backLeft.set_value(false);
+
+    //leave
+    moveDriveMotors(127,0);
+    delay(80);
+    turnCall(25);
+    driveCall(30);
+    turnCall(90);
+
+    //across, aim and push (third)
+    driveCall(46);
+    turnCall(-65);
+    backRight.set_value(true);
+    backLeft.set_value(true);     
+    driveCall(-35);
+    backRight.set_value(false);
+    backLeft.set_value(false);
+    moveDriveMotors(127,0);
+    delay(80);
+
+    //center and leave
+    turnCall(-25);
+    driveCall(24);
+
+    //mid push (last)
+    turnCall(-90);
+    driveCall(16); // move to center
+    wingsSolenoid2.set_value(true);
+    wingsSolenoid.set_value(true);
+    intakePiston.set_value(true);
+    turnCall(-90);
+    moveDriveMotors(127,0);
+    delay(900);
+
+    //center and leave
+    moveDriveMotors(100,0);
+    delay(80);
+    turnCall(0);
+    wingsSolenoid2.set_value(false);
+    wingsSolenoid.set_value(false);
+    //*/
+    driveCall(-7);
+    
+    //face edge and move
+    turnCall(90);
+    ptoSwitcher(PTO);
+    position = 1; //lift up    
+    driveCall(-100);
+    turnCall(90);
+    driveCall(38,2,12);
+    moveDriveMotors(127,0);
+    delay(300);
+    moveDriveMotors(-20,0);
+    delay(200);
+    moveDriveMotors(0,0);
+    position = 10;
+
+
+}
+
+void skillsAutoBackup1(){
+///*
+    intakePiston.set_value(false);
+    cataRunner = true;
+    intMotor = 127;
+    delay(100);
+    cataRunner = false;
+    turnCall(-32);
+    intMotor.brake();
+    driveCall(20);
+    turnCall(32);
+
+    //push in
+    intakePiston.set_value(true);
+    intMotor = -127;
+    moveDriveSideMotors(127, 127);
     delay(600);
     moveDriveSideMotors(0, 0);
     intMotor.brake();
@@ -54,7 +213,7 @@ void skillsAuto() {
 	rMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	lMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    delay(28000); //25!! ----------------------------------
+    delay(25000); //25!! ----------------------------------
     delay(2000);
     backRight.set_value(false);
     delay(500);
@@ -70,20 +229,16 @@ void skillsAuto() {
     intMotor = -127;
     driveCall(41);
     turnCallAbsolute(-90);
-    moveDriveMotors(-100,0);
-    delay(100);
-    while(fabs(gyro.get_pitch())>5) {
-        delay(10);
-    }
-    delay(1000);
+    moveDriveMotors(-127,0);
+    delay(1200);
     intMotor.brake();
     //backRight.set_value(true);
     //backLeft.set_value(true);
 
     //first push
-    moveDriveMotors(-85,0);
-    delay(1000);
-    moveDriveMotors(100,0);
+    moveDriveMotors(-60,0);
+    delay(1500);
+    moveDriveMotors(127,0);
     delay(80);
 
     //recenter and leave
@@ -103,7 +258,7 @@ void skillsAuto() {
     backLeft.set_value(false);
 
     //leave
-    moveDriveMotors(100,0);
+    moveDriveMotors(127,0);
     delay(80);
     turnCall(20);
     driveCall(30);
@@ -117,7 +272,7 @@ void skillsAuto() {
     driveCall(-34.5);
     backRight.set_value(false);
     backLeft.set_value(false);
-    moveDriveMotors(100,0);
+    moveDriveMotors(127,0);
     delay(80);
 
     //center and leave
@@ -133,7 +288,7 @@ void skillsAuto() {
     driveCall(28);
 
     //center and leave
-    moveDriveMotors(100,0);
+    moveDriveMotors(127,0);
     delay(80);
     turnCall(0);
     wingsSolenoid2.set_value(false);
@@ -152,7 +307,6 @@ void skillsAuto() {
     delay(300);
     moveDriveMotors(0,0);
     position = 10;
-
 
 }
 
@@ -498,3 +652,141 @@ intakePiston.set_value(false);
 
 }
 
+void nearsideSafeAWP(){
+    intakePiston.set_value(false);
+    cataRunner = true;
+    intMotor = 127;
+    delay(200);
+    cataRunner = false;
+    intMotor.brake();
+
+    driveCall(16);
+    intakePiston.set_value(true);
+    turnCall(45);
+    driveCall(17);
+    turnCall(0);
+    delay(100);
+    driveCall(-15,1,15);
+    turnCall(-45);
+    backLeft.set_value(true);
+    driveCall(-12);
+    backLeft.set_value(false);
+    driveCall(-10);
+    turnCall(-45);
+    driveCall(-35.5,1,15);
+}
+
+void nearsideBallrushAWP(){
+    gyro.set_rotation(14);
+    absoluteAngle = 14;
+    intakePiston.set_value(false);
+    // wingsSolenoid2.set_value(true);
+    // delay(800);
+    // wingsSolenoid2.set_value(false);
+    intMotor = 127;
+    driveCall(46);
+    delay(100);
+    driveCall(-46);
+    intMotor.brake();
+    turnCallAbsolute(120);
+    intMotor = -127;
+    intakePiston.set_value(true);
+    delay(200);
+    driveCall(-24,0.5,12);
+    turnCallAbsolute(160);
+    driveCall(-10,1,12);
+    turnCallAbsolute(180);
+    driveCall(-18);
+
+    driveCall(13,1,15);
+    turnCall(-200,1.5);
+    driveCall(-5);
+    turnCall(-25);
+    backLeft.set_value(true);
+    driveCall(-10);
+    backLeft.set_value(false);
+
+    driveCall(-6);
+    turnCall(-40);
+    driveCall(-13);
+    turnCall(-5);
+    backRight.set_value(true);
+    driveCall(-20);
+    backRight.set_value(false);
+    intMotor.brake();
+}
+
+void nearSideBallrushElims(){
+    gyro.set_rotation(14);
+    absoluteAngle = 14;
+    intakePiston.set_value(false);
+    // wingsSolenoid2.set_value(true);
+    // delay(800);
+    // wingsSolenoid2.set_value(false);
+    intMotor = 127;
+    driveCall(46);
+    delay(100);
+    driveCall(-46);
+    intMotor.brake();
+    turnCallAbsolute(120);
+    intMotor = -127;
+    //
+    intakePiston.set_value(true);
+    delay(200);
+    driveCall(-26,1,12);
+    turnCallAbsolute(180);
+    driveCall(-18);
+
+    driveCall(15,1,15);
+    turnCall(-225,1.5);
+    backLeft.set_value(true);
+    driveCall(-10);
+    backLeft.set_value(false);
+
+    driveCall(-6);
+    turnCall(-40);
+    driveCall(-13);
+    turnCall(-15);
+    backRight.set_value(true);
+    driveCall(-22);
+    backRight.set_value(false);
+    intMotor.brake();
+
+    //end part
+    driveCall(28);
+    turnCallAbsolute(-45);
+    driveCall(40);
+    backRight.set_value(true);    
+    turnCall(135);
+}
+
+void farSideAutoUnlucky(){
+    gyro.set_rotation(-14);
+    absoluteAngle = -14;
+    intakePiston.set_value(false);
+    intMotor = 127;
+    driveCall(48);
+    delay(100);
+    driveCall(-5);
+    wingsSolenoid2.set_value(true);
+    turnCallAbsolute(90);
+    intMotor.brake();
+    driveCall(28);
+    driveCall(-24);
+    turnCall(135);
+    intMotor = 127;
+    driveCall(12);
+    delay(100);
+    driveCall(-6);
+    turnCall(90);
+    driveCall(-60);
+    turnCall(135);
+}
+
+void farSideAuto(){
+    moveDriveMotors(-127,0);
+    delay(2000);
+    driveCall(10);
+    moveDriveMotors(-127,0);
+    delay(2000);
+}

@@ -100,8 +100,8 @@ void lifter(int position)
     else if (position == 10) // down halfway for hang
     {
         startTimer(1);
-        rtMotor = 127;
-        ltMotor = 127;
+        rtMotor = 100;
+        ltMotor = 100;
         ratchPiston.set_value(true);
         while (liftSens.get_position() >= 3200 && getTime(1) < 3000)
         {
@@ -137,7 +137,7 @@ void catapult()
         if (cataRunner == true
         || (autoCata == true && cataDist.get() <= 50))
         {
-            cataMotor = 127; // crutch value change back to 127
+            cataMotor = 127;
             delay(200);
         }
         else if (cataRot.get_position() <= 12400 && cataRunner == false)
@@ -145,6 +145,6 @@ void catapult()
             cataMotor = 127;
             delay(10);
         }
-        else if (!skillsCataVariable) cataMotor.brake();
+        else cataMotor.brake();
     }
 }
