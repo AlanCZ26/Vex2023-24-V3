@@ -16,7 +16,7 @@ Established terminal connection
         `:yNy:`                      Powered by PROS for VEX V5
            "                Copyright (c) Purdue University ACM SIGBots
 Version:        3.8.0     Platform:  V1.1.2 (b34)     Uptime:    0.000 s
-Compiled:   Jan  4 2024 22:56:23     Directory:                        
+Compiled:   Jan  4 2024 22:12:26     Directory:                        
 
 
 
@@ -35,167 +35,190 @@ Compiled:   Jan  4 2024 22:56:23     Directory:
         `:yNy:`                      Powered by PROS for VEX V5
            "                Copyright (c) Purdue University ACM SIGBots
 Version:        3.8.0     Platform:  V1.1.2 (b34)     Uptime:    0.000 s
-Compiled:   Jan  4 2024 22:56:23     Directory:                        
+Compiled:   Jan  4 2024 22:12:26     Directory:                        
+
+
+--------MOV-------
+Starting time: 800ms
+Target: 46
+TOOK 1076MS
+Ending distance: 45.9713
+--------END-------
+
+--------MOV-------
+Starting time: 1986ms
+Target: -46
+TOOK 1060MS
+Ending distance: -46.0224
+--------END-------
+
+--------TRN-------
+Starting time: 3056ms
+Starting true angle: 11.4898
+Target: 90
+TOOK 670MS
+Ending true angle: 104.213
+Ending expected angle: 104
+--------END-------
+
+ERROR - pros.serial.terminal.terminal:reader -  - pros-cli version:3.4.3
+  File "pros/serial/devices/vex/v5_device.py", line 1006, in _txrx_ext_packet
+  File "pros/serial/devices/vex/v5_device.py", line 956, in _rx_ext_packet
+AssertionError
+We detected something went wrong! Do you want to send a report? [y/N]: Transferring V5 to download channel
+Established terminal connection
+
+
+
+         _+=+_
+      .-`  .  `-.          8888888b.  8888888b.   .d88888b.   .d8888b.
+   _+`     "     `+_       888   Y88b 888   Y88b d88P" "Y88b d88P  Y88b
+  \\\sssssssssssss///      888    888 888    888 888     888 Y88b.
+     .ss\  *  /ss.         888   d88P 888   d88P 888     888  "Y888b.
+ .+bm  .s  *  s.  md+.     8888888P"  8888888P"  888     888     "Y88b.
+.hMMMMs .  *  . sMMMMh.    888        888 T88b   888     888       "888
+ `\hMMMb \ | / dMMMh:      888        888  T88b  Y88b. .d88P Y88b  d88P
+   -SNMNo  -  oNMNs-       888        888   T88b  "Y88888P"   "Y8888P"
+     `+dMh\./dMd/
+        `:yNy:`                      Powered by PROS for VEX V5
+           "                Copyright (c) Purdue University ACM SIGBots
+Version:        3.8.0     Platform:  V1.1.2 (b34)     Uptime:    0.000 s
+Compiled:   Jan  4 2024 22:50:25     Directory:                        
+
+
+
+
+
+         _+=+_
+      .-`  .  `-.          8888888b.  8888888b.   .d88888b.   .d8888b.
+   _+`     "     `+_       888   Y88b 888   Y88b d88P" "Y88b d88P  Y88b
+  \\\sssssssssssss///      888    888 888    888 888     888 Y88b.
+     .ss\  *  /ss.         888   d88P 888   d88P 888     888  "Y888b.
+ .+bm  .s  *  s.  md+.     8888888P"  8888888P"  888     888     "Y88b.
+.hMMMMs .  *  . sMMMMh.    888        888 T88b   888     888       "888
+ `\hMMMb \ | / dMMMh:      888        888  T88b  Y88b. .d88P Y88b  d88P
+   -SNMNo  -  oNMNs-       888        888   T88b  "Y88888P"   "Y8888P"
+     `+dMh\./dMd/
+        `:yNy:`                      Powered by PROS for VEX V5
+           "                Copyright (c) Purdue University ACM SIGBots
+Version:        3.8.0     Platform:  V1.1.2 (b34)     Uptime:    0.000 s
+Compiled:   Jan  4 2024 22:50:25     Directory:                        
 
 
 --------MOV-------
 Starting time: 0ms
 Target: 46
 TOOK 1048MS
-Ending distance: 46.1551
+Ending distance: 46.053
 --------END-------
 
 --------MOV-------
 Starting time: 1158ms
 Target: -46
 TOOK 1040MS
-Ending distance: -46.2368
+Ending distance: -46.2674
 --------END-------
 
 --------TRN-------
 Starting time: 2208ms
-Starting true angle: 12.299
+Starting true angle: 14.9706
 Target: 0
-TOOK 910MS
-Ending true angle: 119.672
+TOOK 870MS
+Ending true angle: 119.775
 Ending expected angle: 120
 --------END-------
 
 --------MOV-------
-Starting time: 3328ms
-Target: -24
+Starting time: 3288ms
+Target: -27
    =============
      TIMED OUT
-     (1010ms)
+     (1510ms)
    =============
-Ending distance: -23.32
+Ending distance: -25.6224
 --------END-------
 
 --------TRN-------
-Starting time: 4348ms
-Starting true angle: 118.747
+Starting time: 4808ms
+Starting true angle: 117.686
 Target: 0
-TOOK 650MS
-Ending true angle: 179.293
+TOOK 680MS
+Ending true angle: 179.382
 Ending expected angle: 180
 --------END-------
 
 --------MOV-------
-Starting time: 5008ms
+Starting time: 5498ms
 Target: -18
    =============
      TIMED OUT
      (810ms)
    =============
-Ending distance: -15.7237
+Ending distance: -14.6057
 --------END-------
 
 --------MOV-------
-Starting time: 5828ms
+Starting time: 6318ms
 Target: 13
    =============
      TIMED OUT
      (1010ms)
    =============
-Ending distance: 12.1961
+Ending distance: 12.2012
 --------END-------
 
 --------TRN-------
-Starting time: 6848ms
-Starting true angle: 179.297
+Starting time: 7338ms
+Starting true angle: 179.174
 Target: -225
-TOOK 1180MS
-Ending true angle: -44.4443
+TOOK 1230MS
+Ending true angle: -44.4122
 Ending expected angle: -45
 --------END-------
 
 --------MOV-------
-Starting time: 8038ms
+Starting time: 8578ms
 Target: -12
 TOOK 460MS
-Ending distance: -11.9459
+Ending distance: -11.9153
 --------END-------
 
 --------MOV-------
-Starting time: 8508ms
+Starting time: 9048ms
 Target: -10
-TOOK 410MS
-Ending distance: -9.88856
+TOOK 400MS
+Ending distance: -9.81708
 --------END-------
 
 --------TRN-------
-Starting time: 8928ms
-Starting true angle: -44.783
+Starting time: 9458ms
+Starting true angle: -43.7638
 Target: -40
-TOOK 510MS
-Ending true angle: -85.1293
+TOOK 530MS
+Ending true angle: -85.1648
 Ending expected angle: -85
 --------END-------
 
 --------MOV-------
-Starting time: 9448ms
+Starting time: 9998ms
 Target: -13
-TOOK 480MS
-Ending distance: -13.0282
+TOOK 470MS
+Ending distance: -12.9414
 --------END-------
 
 --------TRN-------
-Starting time: 9938ms
-Starting true angle: -83.9803
+Starting time: 10478ms
+Starting true angle: -85.7749
 Target: -5
-TOOK 260MS
-Ending true angle: -90.3723
+TOOK 200MS
+Ending true angle: -90.5333
 Ending expected angle: -90
 --------END-------
 
 --------MOV-------
-Starting time: 10208ms
+Starting time: 10688ms
 Target: -20
-TOOK 620MS
-Ending distance: -19.9609
+TOOK 640MS
+Ending distance: -19.9966
 --------END-------
 
---------MOV-------
-Starting time: 10838ms
-Target: 28
-TOOK 820MS
-Ending distance: 28.2158
---------END-------
-
---------TRN-------
-Starting time: 11668ms
-Starting true angle: -91.9158
-Target: 0
-TOOK 860MS
-Ending true angle: -0.783534
-Ending expected angle: 0
---------END-------
-
---------MOV-------
-Starting time: 12538ms
-Target: 22
-TOOK 630MS
-Ending distance: 22.0897
---------END-------
-
---------TRN-------
-Starting time: 13178ms
-Starting true angle: -0.576872
-Target: 90
-TOOK 780MS
-Ending true angle: 90.1284
-Ending expected angle: 90
---------END-------
-
---------MOV-------
-Starting time: 13968ms
-Target: -26
-TOOK 730MS
-Ending distance: -25.9492
---------END-------
-
-ERROR - pros.serial.terminal.terminal:reader - Couldn't find the response header in the device response after 2.0 s. Got  but was expecting aa55 - pros-cli version:3.4.3
-  File "pros/serial/devices/vex/vex_device.py", line 115, in _txrx_packet
-  File "pros/serial/devices/vex/vex_device.py", line 75, in _rx_packet
-OSError: Couldn't find the response header in the device response after 2.0 s. Got  but was expecting aa55
-We detected something went wrong! Do you want to send a report? [y/N]: 

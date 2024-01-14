@@ -39,6 +39,9 @@
 #include "autoFunctions.hpp"
 #include "driveFunctions.hpp"
 #include "autoRoutes.hpp"
+#include "odom.hpp"
+
+#include "lemlib/api.hpp"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do
@@ -81,6 +84,11 @@ extern Motor ltMotor;
 extern Motor rMotor1;
 extern Motor rMotor2;
 extern Motor rtMotor;
+
+extern pros::MotorGroup left_side_motors;
+extern pros::MotorGroup right_side_motors;
+
+extern lemlib::Drivetrain_t drivetrain;
 
 extern Motor intMotor;
 extern Motor cataMotor;

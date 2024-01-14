@@ -2,7 +2,7 @@
 #include "pros/llemu.hpp"
 #include "pros/screen.h"
 
-void testingAuto() {
+void testingAuto1() {
     /*
     turnCall(45);
     turnCall(-45);
@@ -17,6 +17,49 @@ void testingAuto() {
     delay(1000);
     driveCall(-24);
     delay(1000);
+}
+void testingAuto(){
+    driveCall(2);
+    delay(500);
+    driveCall(-2);
+    delay(500);
+    driveCall(4);
+    delay(500);
+    driveCall(-4);
+    delay(500);
+    driveCall(8);
+    delay(500);
+    driveCall(-8);
+    delay(500);
+    driveCall(12);
+    delay(500);
+    driveCall(-12);
+    delay(500);
+    driveCall(16);
+    delay(500);
+    driveCall(-16);
+    delay(500);
+    driveCall(20);
+    delay(500);
+    driveCall(-20);
+    delay(500);
+    driveCall(24);
+    delay(500);
+    driveCall(-24);
+    delay(500);
+    driveCall(30);
+    delay(500);
+    driveCall(-30);
+    delay(500);
+    driveCall(40);
+    delay(500);
+    driveCall(-40);
+    delay(500);
+    driveCall(50);
+    delay(500);
+    driveCall(-50);
+    delay(500);
+
 }
 
 void skillsAuto() {
@@ -694,9 +737,11 @@ void nearsideBallrushAWP(){
     delay(200);
     driveCall(-24,0.5,12);
     turnCallAbsolute(160);
+    backLeft.set_value(true);
     driveCall(-10,1,12);
     turnCallAbsolute(180);
     driveCall(-18);
+    backLeft.set_value(false);
 
     driveCall(13,1,15);
     turnCall(-200,1.5);

@@ -5,7 +5,7 @@
 #include "pros/screen.h"
 #include "timer.hpp"
 #include <sys/_stdint.h>
-#include "lemlib/api.hpp"
+
 // e
 Motor lMotor1(6, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
 Motor lMotor2(7, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
@@ -13,6 +13,9 @@ Motor ltMotor(1, MOTOR_GEAR_BLUE, true);
 Motor rMotor1(8, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 Motor rMotor2(9, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 Motor rtMotor(10, MOTOR_GEAR_BLUE, false);
+
+pros::MotorGroup leftMotors({lMotor1, lMotor2});
+pros::MotorGroup rightMotors({lMotor1, lMotor2});
 
 Motor intMotor(-11);
 Motor cataMotor(-16);
@@ -38,6 +41,14 @@ Controller master(E_CONTROLLER_MASTER);
  * When this callback is fired, it will toggle line 2 of the LCD text between
  * "I was pressed!" and nothing.
  */
+
+lemlib::Drivetrain_t drivetrain {
+    &leftMotors, // left drivetrain motors
+    &rightMotors, // right drivetrain motors
+    10, // track width (CHANGE WHEN BASE IS BUILT)
+    2.75, // wheel diameter
+    450 // wheel rpm
+};
 
 int position = -1;
 void liftThread()
@@ -79,7 +90,8 @@ void initialize()
 	pros::lcd::register_btn1_cb(on_center_button);
 	Task cataTask(catapult);
 	Task armTask(liftThread);
-	gyro.reset();
+	chassis.calibrate();
+	chassis.setPose(0,0,0);
 	delay(2000);
 	pros::Distance catapultLoadDist(12);
 	rMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
@@ -135,9 +147,9 @@ void autonomous()
 	//skillsAuto();
 	//testingAuto();
 	//nearsideSafeAWP();
-	//nearsideBallrushAWP();
+	nearsideBallrushAWP();
 	//nearSideBallrushElims();
-	farSideAuto();
+	//farSideAuto();
 }
 
 /**

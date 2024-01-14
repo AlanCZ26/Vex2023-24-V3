@@ -180,7 +180,7 @@ void turnCall(double targetAngle)
     }
     turn(targetAngle, time, kP, kI, kD, integralKickin, minVal);
 }
-// pros terminal | tee output.txt
+// pros terminal --no-banner | tee output.txt 
 void turnCall(double targetAngle, double kP)
 {
     double time = 1000;
