@@ -2,23 +2,16 @@
 #include "pros/llemu.hpp"
 #include "pros/screen.h"
 
-void testingAuto1() {
+void testingAuto() {
     /*
     turnCall(45);
     turnCall(-45);
     turnCall(90);
     turnCall(-90);*/
 
-    driveCall(12);
-    delay(1000);
-    driveCall(-12);
-    delay(1000);
     driveCall(24);
-    delay(1000);
-    driveCall(-24);
-    delay(1000);
 }
-void testingAuto(){
+void testingAutoe(){
     driveCall(2);
     delay(500);
     driveCall(-2);
@@ -737,11 +730,9 @@ void nearsideBallrushAWP(){
     delay(200);
     driveCall(-24,0.5,12);
     turnCallAbsolute(160);
-    backLeft.set_value(true);
     driveCall(-10,1,12);
     turnCallAbsolute(180);
     driveCall(-18);
-    backLeft.set_value(false);
 
     driveCall(13,1,15);
     turnCall(-200,1.5);

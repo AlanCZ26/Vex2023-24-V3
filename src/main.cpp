@@ -14,8 +14,8 @@ Motor rMotor1(8, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 Motor rMotor2(9, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 Motor rtMotor(10, MOTOR_GEAR_BLUE, false);
 
-pros::MotorGroup leftMotors({lMotor1, lMotor2});
-pros::MotorGroup rightMotors({lMotor1, lMotor2});
+//pros::MotorGroup leftMotors({lMotor1, lMotor2});
+//pros::MotorGroup rightMotors({lMotor1, lMotor2});
 
 Motor intMotor(-11);
 Motor cataMotor(-16);
@@ -31,6 +31,7 @@ ADIDigitalOut wingsSolenoid({{20, 'h'}});
 ADIDigitalOut backRight({{20, 'b'}});
 ADIDigitalOut ratchPiston({{20, 'c'}});
 ADIDigitalOut backLeft({{20, 'a'}});
+ADIDigitalOut sideHangPiston({{20, 'f'}});
 
 ADIDigitalOut intakePiston(8);
 
@@ -42,13 +43,14 @@ Controller master(E_CONTROLLER_MASTER);
  * "I was pressed!" and nothing.
  */
 
+/*
 lemlib::Drivetrain_t drivetrain {
     &leftMotors, // left drivetrain motors
     &rightMotors, // right drivetrain motors
     10, // track width (CHANGE WHEN BASE IS BUILT)
     2.75, // wheel diameter
     450 // wheel rpm
-};
+};*/
 
 int position = -1;
 void liftThread()
@@ -145,9 +147,9 @@ void autonomous()
 	AUTOTIMER = 4;
 	startTimer(AUTOTIMER);
 	//skillsAuto();
-	//testingAuto();
+	testingAuto();
 	//nearsideSafeAWP();
-	nearsideBallrushAWP();
+	//nearsideBallrushAWP();
 	//nearSideBallrushElims();
 	//farSideAuto();
 }
@@ -174,6 +176,7 @@ void opcontrol()
 	bool toggleBack = 0;
 	bool toggleBackRight = 0;
 	bool toggleCata = 0;
+	bool toggleSideHang = 0;
 	cataRunner = false;
 	int iter = 0;
 	while (gyro.is_calibrating())
@@ -199,11 +202,16 @@ void opcontrol()
 		if (!master.get_digital(DIGITAL_LEFT)) {
 			pros::screen::print(TEXT_MEDIUM, 8, "l1: %f", lMotor1.get_actual_velocity());
 			pros::screen::print(TEXT_MEDIUM, 9, "l2: %f", lMotor2.get_actual_velocity());
-			pros::screen::print(TEXT_MEDIUM, 10, "lT: %f", ltMotor.get_actual_velocity());
-			pros::screen::print(TEXT_MEDIUM, 11, "r1: %f", rMotor1.get_actual_velocity());
-			pros::screen::print(TEXT_MEDIUM, 12, "r2: %f", rMotor2.get_actual_velocity());
-			pros::screen::print(TEXT_MEDIUM, 13, "rT: %f", rtMotor.get_actual_velocity());
+			//pros::screen::print(TEXT_MEDIUM, 10, "lT: %f", ltMotor.get_actual_velocity());
+			pros::screen::print(TEXT_MEDIUM, 10, "r1: %f", rMotor1.get_actual_velocity());
+			pros::screen::print(TEXT_MEDIUM, 11, "r2: %f", rMotor2.get_actual_velocity());
+			//pros::screen::print(TEXT_MEDIUM, 13, "rT: %f", rtMotor.get_actual_velocity());
 		}
+		if (master.get_digital_new_press(DIGITAL_B) == 1)
+		{
+			toggleSideHang = !toggleSideHang;
+			sideHangPiston.set_value(toggleSideHang);
+		}	
 
 		if (master.get_digital_new_press(DIGITAL_Y) == 1)
 		{

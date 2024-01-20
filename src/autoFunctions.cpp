@@ -42,7 +42,7 @@ void driveDist(double target, double time, double kP, double kI, double kD, doub
     double endVariable = fabs(target);
     while (fabs(endVariable) > 0.5 && time >= getTime(0))
     {
-        measure = (((lMotor1.get_position() + rMotor1.get_position() + lMotor2.get_position() + rMotor2.get_position())) * 0.00425424005);
+        measure = (((lMotor2.get_position() + rMotor2.get_position())) * 0.002127120025868);
         error = target - measure;
         if (fabs(integral) <= intMax)
             integral += error;

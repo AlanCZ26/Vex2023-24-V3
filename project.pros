@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "rush awp 2",
+    "project_name": "rush awp 3",
     "target": "v5",
     "templates": {
       "LemLib": {
