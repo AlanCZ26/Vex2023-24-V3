@@ -135,9 +135,9 @@ void autonomous()
 	//skillsAuto();
 	//testingAuto();
 	//nearsideSafeAWP();
-	//nearsideBallrushAWP();
+	nearsideBallrushAWP();
 	//nearSideBallrushElims();
-	farSideAuto();
+	//farSideAuto();
 }
 
 /**
