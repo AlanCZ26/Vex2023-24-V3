@@ -6,13 +6,10 @@ void moveDriveSideMotors(int leftPower, int rightPower)
 {
     rMotor1 = rightPower;
     rMotor2 = rightPower;
+    rMotor3 = rightPower;
     lMotor1 = leftPower;
     lMotor2 = leftPower;
-    if (PTOvar == DRIVE)
-    {
-        ltMotor = leftPower;
-        rtMotor = rightPower;
-    }
+    lMotor3 = rightPower;
 }
 
 void moveDriveMotors(int forwardPower, int turningPower)
@@ -22,110 +19,38 @@ void moveDriveMotors(int forwardPower, int turningPower)
     {
         rMotor1.brake();
         rMotor2.brake();
+        rMotor3.brake();
         lMotor1.brake();
         lMotor2.brake();
-        if (PTOvar == DRIVE)
-        {
-            ltMotor.brake();
-            rtMotor.brake();
-        }
+        lMotor3.brake();
     }
     else {
         rMotor1 = forwardPower - turningPower;
         rMotor2 = forwardPower - turningPower;
+        rMotor3 = forwardPower - turningPower;
         lMotor1 = forwardPower + turningPower;
         lMotor2 = forwardPower + turningPower;
-        if (PTOvar == DRIVE)
-        {
-            rtMotor = forwardPower - turningPower;
-            ltMotor = forwardPower + turningPower;
-        }        
+        lMotor3 = forwardPower + turningPower;   
     }    
 
 }
 
 void ptoSwitcher(int i)
 {
-    if (i == DRIVE)
+    if (i == PTOMODECATA)
     {
-        PTOvar = DRIVE;
-        PTOpiston.set_value(true);
-        ltMotor.brake();
-        rtMotor.brake();
-    }
-    else if (i == PTO)
-    {
-        PTOvar = PTO;
+        PTOvar = PTOMODECATA;
         PTOpiston.set_value(false);
-        ltMotor.brake();
-        rtMotor.brake();
+        cataMotor.brake();
+        cataMotor2.brake();
     }
-}
-
-int heldPosition = 0;
-void lifter(int position)
-{
-    if (position == 1 && heldPosition != 1) // up
+    else if (i == PTOMODELIFT)
     {
-        ptoSwitcher(PTO);
-        intakePiston.set_value(false);
-        startTimer(1);
-        rtMotor = -127;
-        ltMotor = -127;
-        while (liftSens.get_position() <= 9900 && getTime(1) < 3000)
-        {
-            pros::delay(10);
-        }
-        rtMotor = 0;
-        ltMotor = 0;
-        heldPosition = position;
+        PTOvar = PTOMODELIFT;
+        PTOpiston.set_value(true);
+        cataMotor.brake();
+        cataMotor2.brake();
     }
-    else if (position == 0 && heldPosition != 0) // down
-    {
-        startTimer(1);
-        backRight.set_value(0);
-        rtMotor = 127;
-        ltMotor = 127;
-        while (liftSens.get_position() >= 900 && getTime(1) < 2000)
-        {
-            pros::delay(10);
-            if (getTime(1) > 1500)//if it takes over 2s to go down
-            {ratchPiston.set_value(true);}
-        }
-        rtMotor = 0;
-        ltMotor = 0;
-        ptoSwitcher(DRIVE);
-        heldPosition = position;
-    }
-    else if (position == 10) // down halfway for hang
-    {
-        startTimer(1);
-        rtMotor = 100;
-        ltMotor = 100;
-        ratchPiston.set_value(true);
-        while (liftSens.get_position() >= 3200 && getTime(1) < 3000)
-        {
-            pros::delay(10);
-        }
-        rtMotor = 0;
-        ltMotor = 0;
-        ptoSwitcher(DRIVE);
-        heldPosition = position;
-    }
-    else if (position == 2 && heldPosition != 2) // middle
-    {
-        ptoSwitcher(PTO);
-        while (liftSens.get_position() <= 3000)
-        {
-            rtMotor = -127;
-            ltMotor = -127;
-            pros::delay(10);
-        }
-        rtMotor = 0;
-        ltMotor = 0;
-        heldPosition = position;
-    }
-    position = -1;
 }
 
 bool skillsCataVariable = false;
