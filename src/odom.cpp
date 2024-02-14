@@ -2,9 +2,11 @@
 #include "pros/llemu.hpp"
 #include "pros/screen.h"
 
+lemlib::TrackingWheel verticalTrackingWheel(&odomPodVertical, 2.75, 4.3, 2);
+
 // odometry struct
 lemlib::OdomSensors_t sensors {
-    nullptr, // vertical tracking wheel 1
+    &verticalTrackingWheel, // vertical tracking wheel 1
     nullptr, // vertical tracking wheel 2
     nullptr, // horizontal tracking wheel 1
     nullptr, // we don't have a second tracking wheel, so we set it to nullptr

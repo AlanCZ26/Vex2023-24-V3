@@ -96,7 +96,7 @@ extern Motor cataMotor2;
 
 extern Distance cataDist;
 extern Rotation liftRot;
-extern Rotation odomPodVertical(0);
+extern Rotation odomPodVertical;
 extern Imu gyro;
 
 extern ADIDigitalOut PTOpiston;
@@ -107,7 +107,5 @@ extern ADIDigitalOut backLeft;
 extern ADIDigitalOut ratchPiston;
 
 extern Controller master;
-
-extern int position;
 
 #endif  // _PROS_MAIN_H_

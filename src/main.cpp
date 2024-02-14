@@ -13,8 +13,8 @@ Motor rMotor1(0, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 Motor rMotor2(0, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 Motor rMotor3(0, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 
-//pros::MotorGroup leftMotors({lMotor1, lMotor2});
-//pros::MotorGroup rightMotors({lMotor1, lMotor2});
+pros::MotorGroup leftMotors({lMotor1, lMotor2});
+pros::MotorGroup rightMotors({lMotor1, lMotor2});
 
 Motor intMotor(0);
 Motor cataMotor(0);
@@ -40,14 +40,14 @@ Controller master(E_CONTROLLER_MASTER);
  * "I was pressed!" and nothing.
  */
 
-/*
+
 lemlib::Drivetrain_t drivetrain {
     &leftMotors, // left drivetrain motors
     &rightMotors, // right drivetrain motors
     10, // track width (CHANGE WHEN BASE IS BUILT)
     2.75, // wheel diameter
     450 // wheel rpm
-};*/
+};
 
 int position = -1;
 void liftThread()
@@ -56,7 +56,8 @@ void liftThread()
 	{
 		pros::delay(10);
 		if (position != -1) {
-			lifter(position);
+			lift(position);
+			position = -1;
 		}
 	}
 }
@@ -86,7 +87,6 @@ void initialize()
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
 	pros::lcd::register_btn1_cb(on_center_button);
-	Task cataTask(catapult);
 	Task armTask(liftThread);
 	chassis.calibrate();
 	chassis.setPose(0,0,0);
@@ -142,7 +142,7 @@ void autonomous()
 	AUTOTIMER = 4;
 	startTimer(AUTOTIMER);
 	//skillsAuto();
-	testingAuto();
+	//testingAuto();
 	//nearsideSafeAWP();
 	//nearsideBallrushAWP();
 	//nearSideBallrushElims();
@@ -231,19 +231,11 @@ void opcontrol()
 				wingsSolR.set_value(false);
 			}
 		}
-		// else if(getTime(5) >= 2 && master.get_digital(DIGITAL_R2)){
-		// 	backLeft.set_value(1);
-		// 	backRight.set_value(1);
-		// }
 
 		if (master.get_digital_new_press(DIGITAL_UP) == 1)
 		{
 			toggleCata = !toggleCata;
 			cataRunner = toggleCata;
-		}
-		if (master.get_digital_new_press(DIGITAL_DOWN) == 1)
-		{
-			std::cout << "test" << std::endl;
 		}
 
 		if (master.get_digital(DIGITAL_L1) == 1)

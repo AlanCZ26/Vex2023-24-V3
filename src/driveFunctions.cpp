@@ -52,5 +52,33 @@ void ptoSwitcher(int i)
         cataMotor2.brake();
     }
 }
+int state = 0;
+void lift(int input)
+{
+    int limit;
+    startTimer(1);
+    if (input == liftDefault) {limit = 0;}
+    if (input == barHangMin)  {limit = 0;}
+    if (input == sideHangMin) {limit = 0;}
+    if (input == barHangMax)  {limit = 0;}
+    if (input == sideHangMax) {limit = 0;}
+    ratchPiston.set_value(false);
+    ptoSwitcher(PTOMODELIFT);
+    if (input < state) {
+        cataMotor.move(127);
+        cataMotor2.move(127);    
+        while (liftRot.get_position() < limit && getTime(1) < 3000){
+            pros::delay(10);
+        }
+    }
+    else{
+        cataMotor.move(-127);
+        cataMotor2.move(-127); 
+        while (liftRot.get_position() > limit && getTime(1) < 3000){
+            pros::delay(10);
+        }
+    }
 
-bool skillsCataVariable = false;
+    if (input == 3 || input == 4) ratchPiston.set_value(true);
+    state = input;
+}
