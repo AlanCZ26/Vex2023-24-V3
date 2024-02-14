@@ -54,22 +54,3 @@ void ptoSwitcher(int i)
 }
 
 bool skillsCataVariable = false;
-void catapult()
-{
-    delay(200);
-    while (true)
-    {
-        if (cataRunner == true
-        || (autoCata == true && cataDist.get() <= 50))
-        {
-            cataMotor = 127;
-            delay(200);
-        }
-        else if (cataRot.get_position() <= 12400 && cataRunner == false)
-        {
-            cataMotor = 127;
-            delay(10);
-        }
-        else cataMotor.brake();
-    }
-}

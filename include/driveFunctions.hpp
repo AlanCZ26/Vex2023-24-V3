@@ -9,5 +9,4 @@ void ptoSwitcher(int i);
  * \param position up->1, down->0, mid->2
 */
 void moveDriveMotors(int forwardPower, int turningPower);
-void catapult();
 #endif
