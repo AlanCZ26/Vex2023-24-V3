@@ -7,33 +7,31 @@
 #include <sys/_stdint.h>
 
 // e
-Motor lMotor1(6, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor lMotor2(7, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor ltMotor(1, MOTOR_GEAR_BLUE, true);
-Motor rMotor1(8, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor rMotor2(9, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor rtMotor(10, MOTOR_GEAR_BLUE, false);
+Motor lMotor1(0, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor lMotor2(0, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor lMotor3(0, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor1(0, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor2(0, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor3(0, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 
 //pros::MotorGroup leftMotors({lMotor1, lMotor2});
 //pros::MotorGroup rightMotors({lMotor1, lMotor2});
 
-Motor intMotor(-11);
-Motor cataMotor(-16);
+Motor intMotor(0);
+Motor cataMotor(0);
+Motor cataMotor2(0);
 
-Rotation liftSens(19);
-Distance cataDist(13);
-Rotation cataRot(12);
-Imu gyro(2);
+Distance cataDist(0);
+Rotation liftRot(0);
+Rotation odomPodVertical(0);
+Imu gyro(0);
 
 ADIDigitalOut PTOpiston({{20, 'd'}});
-ADIDigitalOut wingsSolenoid2({{20, 'g'}});
-ADIDigitalOut wingsSolenoid({{20, 'h'}});
+ADIDigitalOut wingsSolL({{20, 'g'}});
+ADIDigitalOut wingsSolR({{20, 'h'}});
 ADIDigitalOut backRight({{20, 'b'}});
-ADIDigitalOut ratchPiston({{20, 'c'}});
 ADIDigitalOut backLeft({{20, 'a'}});
-ADIDigitalOut sideHangPiston({{20, 'f'}});
-
-ADIDigitalOut intakePiston(8);
+ADIDigitalOut ratchPiston({{20, 'c'}});
 
 Controller master(E_CONTROLLER_MASTER);
 /**
@@ -86,7 +84,6 @@ void on_center_button()
  */
 void initialize()
 {
-	ptoSwitcher(DRIVE);
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
 	pros::lcd::register_btn1_cb(on_center_button);
@@ -102,7 +99,6 @@ void initialize()
 	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	cataMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     gyro.tare_rotation();
-	intakePiston.set_value(true);
 }
 
 /**
@@ -171,12 +167,10 @@ void opcontrol()
 {
 	int x;
 	int y;
-	bool toggle = 1;
-	bool toggleWing = 0;
-	bool toggleBack = 0;
-	bool toggleBackRight = 0;
-	bool toggleCata = 0;
-	bool toggleSideHang = 0;
+	bool toggleBack = false;
+	bool toggleWings = false;
+	bool toggleCata = false;
+
 	cataRunner = false;
 	int iter = 0;
 	while (gyro.is_calibrating())
@@ -207,11 +201,6 @@ void opcontrol()
 			pros::screen::print(TEXT_MEDIUM, 11, "r2: %f", rMotor2.get_actual_velocity());
 			//pros::screen::print(TEXT_MEDIUM, 13, "rT: %f", rtMotor.get_actual_velocity());
 		}
-		if (master.get_digital_new_press(DIGITAL_B) == 1)
-		{
-			toggleSideHang = !toggleSideHang;
-			sideHangPiston.set_value(toggleSideHang);
-		}	
 
 		if (master.get_digital_new_press(DIGITAL_Y) == 1)
 		{
@@ -219,42 +208,28 @@ void opcontrol()
 			position = 1;
 			backRight.set_value(1);
 		}
-		else if (master.get_analog(ANALOG_RIGHT_Y) <= -110)
-		{
-			position = 0;
-		}
-		else if (master.get_digital_new_press(DIGITAL_RIGHT) == 1)
-		{
-			ratchPiston.set_value(0);
-			position = 2;
-		}
 
-		if (master.get_digital_new_press(DIGITAL_X) == 1)
+		if (master.get_digital_new_press(DIGITAL_R1))
 		{
-			toggle = !toggle;
-			intakePiston.set_value(toggle);
-		}
-		if (master.get_digital_new_press(DIGITAL_R1) == 1)
-		{
-			toggleWing = !toggleWing;
-			wingsSolenoid2.set_value(toggleWing);
-			wingsSolenoid.set_value(toggleWing);
-			if (toggleWing&&toggleBack) {
+			toggleWings = !toggleWings;
+			wingsSolL.set_value(toggleWings);
+			wingsSolR.set_value(toggleWings);
+			if (toggleWings&&toggleBack) {
 				toggleBack = false;
 				backLeft.set_value(false);
 				backRight.set_value(false);
 			}
 		}
-		if (master.get_digital_new_press(DIGITAL_R2) == 1)
+		if (master.get_digital_new_press(DIGITAL_R2))
 		{
 			toggleBack = !toggleBack;
 			startTimer(5);
 			backRight.set_value(toggleBack);
 			backLeft.set_value(toggleBack);
-			if (toggleWing&&toggleBack) {
-				toggleWing = false;
-				wingsSolenoid2.set_value(false);
-				wingsSolenoid.set_value(false);
+			if (toggleWings&&toggleBack) {
+				toggleWings = false;
+				wingsSolL.set_value(false);
+				wingsSolR.set_value(false);
 			}
 		}
 		// else if(getTime(5) >= 2 && master.get_digital(DIGITAL_R2)){

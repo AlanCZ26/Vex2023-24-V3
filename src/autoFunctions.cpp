@@ -12,10 +12,10 @@ void resetMotorEncoders()
 {
     rMotor1.tare_position();
     rMotor2.tare_position();
+    rMotor3.tare_position();
     lMotor1.tare_position();
     lMotor2.tare_position();
-    rtMotor.tare_position();
-    ltMotor.tare_position();
+    lMotor3.tare_position();
 }
 
 double absoluteAngle = 0;

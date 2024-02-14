@@ -80,10 +80,10 @@ void opcontrol(void);
 #endif
 extern Motor lMotor1; 
 extern Motor lMotor2;
-extern Motor ltMotor;
+extern Motor lMotor3;
 extern Motor rMotor1;
 extern Motor rMotor2;
-extern Motor rtMotor;
+extern Motor rMotor3;
 
 extern pros::MotorGroup left_side_motors;
 extern pros::MotorGroup right_side_motors;
@@ -92,19 +92,19 @@ extern lemlib::Drivetrain_t drivetrain;
 
 extern Motor intMotor;
 extern Motor cataMotor;
+extern Motor cataMotor2;
 
-extern Rotation liftSens;
 extern Distance cataDist;
-extern Rotation cataRot;
+extern Rotation liftRot;
+extern Rotation odomPodVertical(0);
 extern Imu gyro;
 
 extern ADIDigitalOut PTOpiston;
-extern ADIDigitalOut wingsSolenoid2;
-extern ADIDigitalOut wingsSolenoid;
+extern ADIDigitalOut wingsSolL;
+extern ADIDigitalOut wingsSolR;
 extern ADIDigitalOut backRight;
 extern ADIDigitalOut backLeft;
 extern ADIDigitalOut ratchPiston;
-extern ADIDigitalOut intakePiston;
 
 extern Controller master;
 
