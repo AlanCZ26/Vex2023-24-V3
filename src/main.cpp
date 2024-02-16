@@ -6,31 +6,31 @@
 #include "timer.hpp"
 #include <sys/_stdint.h>
 // test
-Motor lMotor1(0, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor lMotor2(0, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor lMotor3(0, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor rMotor1(0, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor rMotor2(0, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor rMotor3(0, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor lMotor1(11, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor lMotor2(12, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor lMotor3(13, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor1(19, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor2(20, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor3(21, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 
 pros::MotorGroup leftMotors({lMotor1, lMotor2});
 pros::MotorGroup rightMotors({lMotor1, lMotor2});
 
-Motor intMotor(0);
-Motor cataMotor(0);
-Motor cataMotor2(0);
+Motor intMotor(1);
+Motor cataMotor(15);
+Motor cataMotor2(16);
 
-Distance cataDist(0);
-Rotation liftRot(0);
-Rotation odomPodVertical(0);
-Imu gyro(0);
+Distance cataDist(4); //temp number, not actually connected
+Rotation liftRot(5); //temp
+Rotation odomPodVertical(3);
+Imu gyro(6); //temp
 
-ADIDigitalOut PTOpiston({{20, 'd'}});
-ADIDigitalOut wingsSolL({{20, 'g'}});
-ADIDigitalOut wingsSolR({{20, 'h'}});
-ADIDigitalOut backRight({{20, 'b'}});
-ADIDigitalOut backLeft({{20, 'a'}});
-ADIDigitalOut ratchPiston({{20, 'c'}});
+ADIDigitalOut wingsSolL('a');
+ADIDigitalOut wingsSolR('b');
+ADIDigitalOut backRight('c');
+ADIDigitalOut backLeft('d');
+ADIDigitalOut ratchPiston('g');
+ADIDigitalOut PTOpiston('h');
 
 Controller master(E_CONTROLLER_MASTER);
 /**
