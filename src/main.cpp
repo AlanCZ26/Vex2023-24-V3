@@ -9,21 +9,21 @@
 Motor lMotor1(11, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
 Motor lMotor2(12, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
 Motor lMotor3(13, MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES);
-Motor rMotor1(19, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor rMotor2(20, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
-Motor rMotor3(21, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor1(18, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor2(19, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
+Motor rMotor3(20, MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 
-pros::MotorGroup leftMotors({lMotor1, lMotor2});
-pros::MotorGroup rightMotors({lMotor1, lMotor2});
+pros::MotorGroup leftMotors({lMotor1,lMotor2,lMotor3});
+pros::MotorGroup rightMotors({rMotor1,rMotor2,rMotor3});
 
 Motor intMotor(1);
-Motor cataMotor(15);
-Motor cataMotor2(16);
+Motor cataMotor(15, MOTOR_GEAR_GREEN, false, E_MOTOR_ENCODER_DEGREES);
+Motor cataMotor2(16, MOTOR_GEAR_GREEN, false, E_MOTOR_ENCODER_DEGREES);
 
 Distance cataDist(4); //temp number, not actually connected
 Rotation liftRot(5); //temp
 Rotation odomPodVertical(3);
-Imu gyro(6); //temp
+Imu gyro(10); 
 
 ADIDigitalOut wingsSolL('a');
 ADIDigitalOut wingsSolR('b');
@@ -41,13 +41,7 @@ Controller master(E_CONTROLLER_MASTER);
  */
 
 
-lemlib::Drivetrain_t drivetrain {
-    &leftMotors, // left drivetrain motors
-    &rightMotors, // right drivetrain motors
-    10, // track width (CHANGE WHEN BASE IS BUILT)
-    2.75, // wheel diameter
-    450 // wheel rpm
-};
+
 
 int position = -1;
 void liftThread()
@@ -56,10 +50,21 @@ void liftThread()
 	{
 		pros::delay(10);
 		if (position != -1) {
-			lift(position);
+			int temp = position;
 			position = -1;
+			lift(temp);
 		}
 	}
+}
+void screenT() {
+    // loop forever
+    while (true) {
+        lemlib::Pose pose = chassis.getPose(); // get the current position of the robot
+        pros::lcd::print(0, "x: %f", pose.x); // print the x position
+        pros::lcd::print(1, "y: %f", pose.y); // print the y position
+        pros::lcd::print(2, "heading: %f", pose.theta); // print the heading
+        pros::delay(10);
+    }
 }
 
 void on_center_button()
@@ -88,14 +93,19 @@ void initialize()
 	pros::lcd::set_text(1, "Hello PROS User!");
 	pros::lcd::register_btn1_cb(on_center_button);
 	Task armTask(liftThread);
+	
+	//pros::Task screenTask(screenT);
+	//pros::Task odomTrackerTask(odomTracker);
 	chassis.calibrate();
 	chassis.setPose(0,0,0);
 	delay(2000);
-	pros::Distance catapultLoadDist(12);
-	rMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-	rMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-	lMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+	rMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	rMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	rMotor3.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	lMotor1.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	lMotor2.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	lMotor3.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+	cataMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 	cataMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     gyro.tare_rotation();
 }
@@ -141,6 +151,7 @@ void autonomous()
 	// pros::screen::print(TEXT_MEDIUM, 6, "x: %i", gyro);
 	AUTOTIMER = 4;
 	startTimer(AUTOTIMER);
+	testingAuto2(3);
 	//skillsAuto();
 	//testingAuto();
 	//nearsideSafeAWP();
@@ -181,8 +192,13 @@ void opcontrol()
 	//if (!master.get_digital(DIGITAL_A)){skillsDriverMacro();}
 	
 	while (true)
-	{
+	{	
 		x = master.get_analog(ANALOG_RIGHT_X);
+		if (abs(x)<100) x /= 1.5; //scale
+		if (x > 5 && x < 10) x = 10; //deadzones
+		else if (x < -5 && x > -10) x = -10;
+		else if (abs(x)<5) x = 0;
+
 		y = master.get_analog(ANALOG_LEFT_Y);
 		moveDriveMotors(y, x);
 		pros::screen::print(TEXT_MEDIUM, 2, "x: %i", x);
@@ -201,12 +217,6 @@ void opcontrol()
 			//pros::screen::print(TEXT_MEDIUM, 13, "rT: %f", rtMotor.get_actual_velocity());
 		}
 
-		if (master.get_digital_new_press(DIGITAL_Y) == 1)
-		{
-			ratchPiston.set_value(0);
-			position = 1;
-			backRight.set_value(1);
-		}
 
 		if (master.get_digital_new_press(DIGITAL_R1))
 		{
@@ -232,23 +242,33 @@ void opcontrol()
 			}
 		}
 
-		if (master.get_digital_new_press(DIGITAL_UP) == 1)
-		{
-			toggleCata = !toggleCata;
-			cataRunner = toggleCata;
-		}
 
-		if (master.get_digital(DIGITAL_L1) == 1)
-		{
+		if (master.get_digital(DIGITAL_L1))
 			intMotor = 127;
-		}
-		else if (master.get_digital(DIGITAL_L2) == 1)
-		{
+		else if (master.get_digital(DIGITAL_L2))
 			intMotor = -127;
-		}
-		else
-		{
+		else 
 			intMotor.brake();
+		if (master.get_digital_new_press(DIGITAL_RIGHT)){
+			ptoSwitcher(PTOMODECATA);
+		}
+		else if (master.get_digital_new_press(DIGITAL_DOWN)){
+			ptoSwitcher(PTOMODELIFT);
+		}
+		if (master.get_digital(DIGITAL_X)){
+			cataMotor.move_voltage(master.get_analog(ANALOG_RIGHT_Y)*150);
+        	cataMotor2.move_voltage(master.get_analog(ANALOG_RIGHT_Y)*150);
+			
+		}
+		if (master.get_digital_new_press(DIGITAL_UP)){
+			ratchPiston.set_value(false);
+		}
+		if (master.get_digital_new_press(DIGITAL_LEFT)){
+			ratchPiston.set_value(true);
+		}
+		if (master.get_digital_new_press(DIGITAL_A)) {
+			toggleCata = !toggleCata;
+			catapult(toggleCata);
 		}
 		// hold r2 = 1 side down, let go is back up
 		// press r2 once = both down with toggle back up
@@ -268,6 +288,6 @@ void opcontrol()
 		if (master.get_digital_new_press(DIGITAL_UP) == 1){
 			PTOswitcher(1);
 		}*/
-		pros::delay(20);
+		pros::delay(50);
 	}
 }

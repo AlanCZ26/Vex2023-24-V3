@@ -3,6 +3,8 @@
 
 extern int AUTOTIMER;
 
+void testingAuto2(int i);
+
 // void skillsAuto();
 // void testingAuto();
 // void skillsDriverMacro();

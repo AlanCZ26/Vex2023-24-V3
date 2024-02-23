@@ -10,7 +10,8 @@ void driveCall(double target, double kP, double kD);
 void turnCall(double targetAngle);
 void turnCall(double targetAngle,double kP);
 void turnCallAbsolute(double targetAngle);
-
+//void odomTracker();
+void odomDrive(double x, double y, int time);
 
 
 extern bool PTOvar;

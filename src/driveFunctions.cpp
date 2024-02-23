@@ -52,6 +52,7 @@ void ptoSwitcher(int i)
         cataMotor2.brake();
     }
 }
+
 int state = 0;
 void lift(int input)
 {
@@ -64,21 +65,42 @@ void lift(int input)
     if (input == sideHangMax) {limit = 0;}
     ratchPiston.set_value(false);
     ptoSwitcher(PTOMODELIFT);
+    delay(50);
     if (input < state) {
-        cataMotor.move(127);
-        cataMotor2.move(127);    
-        while (liftRot.get_position() < limit && getTime(1) < 3000){
-            pros::delay(10);
+        cataMotor.move(-127);
+        cataMotor2.move(-127);    
+        while (liftRot.get_position() > limit && getTime(1) < 3000){
+            pros::delay(50);
         }
     }
     else{
-        cataMotor.move(-127);
-        cataMotor2.move(-127); 
-        while (liftRot.get_position() > limit && getTime(1) < 3000){
-            pros::delay(10);
+        cataMotor.move(127);
+        cataMotor2.move(127); 
+        while (liftRot.get_position() < limit && getTime(1) < 3000){
+            pros::delay(50);
         }
     }
 
     if (input == 3 || input == 4) ratchPiston.set_value(true);
     state = input;
 }
+
+void catapult(bool i){
+    if (i) {
+        ptoSwitcher(PTOMODECATA);
+        cataMotor.move(127);
+        cataMotor2.move(127); 
+    }
+    else {
+        cataMotor = 0;
+        cataMotor2 = 0;
+    }
+}
+
+void cataTracker(){
+    int cataEff;
+    while (true){
+        cataEff = (cataMotor.get_efficiency() + cataMotor2.get_efficiency())/2;
+    } 
+}
+

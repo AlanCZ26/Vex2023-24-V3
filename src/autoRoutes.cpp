@@ -2,7 +2,31 @@
 #include "pros/llemu.hpp"
 #include "pros/screen.h"
 
+void testingAuto2(int i) {
+    if (i == 1){
+    chassis.turnTo(53, 53, 1000); // turn to the point (53, 53) with a timeout of 1000 ms
+    delay(2000);
+    chassis.turnTo(-20, 32, 1500, true); // turn to the point (-20, 32) with the back of the robot facing the point, and a timeout of 1500 ms
+    delay(2000);
+    chassis.turnTo(10, 0, 1000, false); // turn to the point (10, 0) with a timeout of 1000 ms, and a maximum speed of 50
+    }
+    else if (i == 2){
+    chassis.moveTo(24, 24, 1000); // move to the point (53, 53) with a timeout of 1000 ms
+    delay(2000);
+    chassis.moveTo(10, 0, 1000, 50);// move to the point (10, 0) with a timeout of 1000 ms, and a maximum speed of 50
+    }
+    else if (i == 3){
+        chassis.moveTo(0,-10,1000);
+        delay(1000);
+        chassis.moveTo(0,0,1000);
+        delay(1000);
+        chassis.moveTo(0,24,1000);
+        delay(1000);
+        chassis.moveTo(0,0,1000);
+    }
+  }
 
+/**/
 // void testingAuto() {
 //     /*
 //     turnCall(45);

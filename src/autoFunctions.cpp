@@ -1,6 +1,7 @@
 #include "main.h"
 #include "pros/llemu.hpp"
 #include "pros/screen.h"
+#include <vector>
 bool PTOvar = false;//no drive when false
 bool infiniteCata;
 bool autoCata;
@@ -307,181 +308,41 @@ void turn(double targetDegree, double time, double kP, double kI, double kD, dou
 //                 shootCommand = False
 //             stallVariable = 0
 
-// Drive amount of Inches
-/*void setDriveStopping(){
-    rMotor1.brake();
-    rMotor2.brake();
-    lMotor1.brake();
-    rMotor2.brake();
-}
-void drive(int lInput, int rInput){
-    lSpeed = lInput / 8;
-    rSpeed = rInput / 8;
-    if (abs(lInput) < 5){
-        lMotor1.brake();
-        lMotor2.brake();
-    }
-    if (PTOvar == false){
-        ltMotor.brake();
-    }
-    if (abs(rInput) < 5){
-        rMotor1.brake();
-        rMotor2.brake();
-        if (PTOvar == false){
-            rtMotor.brake()
-        }
-    }
-    else {
-        lMotor1 = lInput;
-        lMotor2 = lInput;
-        rMotor1 = rInput;
-        rMotor2 = rInput;
-        if(PTOvar == 0){
-            ltMotor = lInput;
-            rtMotor = rInput;
-        }
-    }
-}
-void PTOswitcher(bool i){
-    if (i){
-        PTOvar = 0;
-        PTOpiston = true;
-        ltMotor.brake();
-        rtMotor.brake();
-    }
+//int trackerCurrentState = -1;
+// void odomTracker(){
+//     std::vector<double> xVector;
+//     std::vector<double> yVector;
+//     while (true){
+//         if (trackerCurrentState == -1) continue;
+//         else if (trackerCurrentState == 1) { // currently tracking
+//             lemlib::Pose pose = chassis.getPose();
+//             xVector.push_back(pose.x);
+//             yVector.push_back(pose.y);
+//             std::cout<<"test"<<std::endl;
+//         }
+//         else if (trackerCurrentState == 0) {
+//             trackerCurrentState = -1;
+//             xVector.clear();
+//             yVector.clear();
+//             std::cout<<std::endl<<"x"<<std::endl<<"[";
+//             for (int i=0;i<xVector.size();i++) {
+//                 std::cout << xVector.at(i) <<", ";
+//                 delay(10);
+//             }
+//             std::cout<<"0]"<<std::endl;
+//             std::cout<<std::endl<<"y"<<std::endl<<"[";
+//             for (int i=0;i<yVector.size();i++) {
+//                 std::cout << yVector.at(i) <<", ";
+//                 delay(10);
+//             }
+//             std::cout<<"0]"<<std::endl;
+//         }
+//     }
+// }
 
-    else {
-        PTOvar = 1;
-        PTOpiston = false;
-        ltMotor.brake();
-        rtMotor.brake();
-    }
+void odomDrive(double x, double y, int time){
+    int maxSpeed = 200;
+    //trackerCurrentState = 1;
+    chassis.moveTo(x,y,time,maxSpeed);
+    //trackerCurrentState = 0;
 }
-void PTOmotors(int s){
-    if (PTOvar == 1){
-        if (s == 0){
-            ltMotor.stop()
-            rtMotor.stop()
-        }
-        else{
-            ltMotor.spin(FORWARD,s,VOLT)
-            rtMotor.spin(FORWARD,s,VOLT)
-        }
-    }
-bool shootCommand = False
-bool infiniteCata = False
-}
-void catapult(){
-    int stallVariable = 0
-    while (true){
-        delay(100)
-        if (infiniteCata == false){
-            cataMotor.brake()
-        }
-        if ((master.get_digital(DIGITAL_UP)) || (cataDist.object_distance(MM) < 50 and autoCata == True) || (shootCommand) || (autoCata == True and stallVariable > 100)){
-            cataMotor = 127;
-            delay(300);
-            timer = 80;
-            while ((catapultLoadDist.object_distance(MM) > 90) and timer > 0){
-                delay(100);
-                timer -= 1;
-            }
-            if (timer == 0){
-                cataMotor = -127;
-                delay(100);
-                cataMotor.brake()
-            }
-            else{
-                shootCommand = false
-            }
-            stallVariable = 0
-        }
-
-    }
-}
-void lifter(){
-    while (true){
-        delay(100)
-        if ((master.get_digital(DIGITAL_Y) || liftVar == 1)){
-                setDriveStopping()
-                PTOswitcher(false)
-                ratchPiston.set(false)
-                master.print("F")
-                delay(200)
-                master.set_cursor(0,0)
-                ltMotor.brake()
-                rtMotor.brake()
-                PTOmotors(12)
-                i = 0
-                while ((liftSens.position() % 360) < 100 and i < 30){
-                    wait(0.1,SECONDS)
-                    i+=1
-                }
-                delay(50)
-                PTOmotors(0)
-                liftVar = 0
-                autoCata = true
-            }
-
-        else if (controller.axis2.position() < -96 or liftVar == 2){
-            autoCata = False
-            PTOmotors(-12);
-            ltMotor.coast();
-            rtMotor.coast();
-            setDriveStopping();
-            i = 0;
-        }
-
-            while ((liftSens.position() % 360) > 10 && i < 30){
-                delay(100);
-                i+=1;
-                if (i >=25){
-                    ratchPiston = true;
-                }
-            }
-            delay(50);
-            PTOmotors(0);
-            PTOswitcher(true);
-            liftVar = 0;
-        else if (controller.buttonRight.pressing() || liftVar == 3){
-            setDriveStopping();
-            PTOswitcher(false)
-            ratchPiston.set(false)
-            controller.screen.print("F")
-            controller.screen.set_cursor(0,0)
-            ltMotor.hold()
-            rtMotor.set_stopping(HOLD)
-            PTOmotors(12) #loop to make it go up until limit
-            i = 0
-        }
-            while ((liftSens.position() % 360) < 50 and i < 30){
-                delay(100)
-                i+=1
-            }
-            PTOmotors(0)
-            liftVar = 0
-    }
-
-}
-void driveInches(int lInput, int rInput, int lSpd, int rSpd){
-
-}
-void driveDist(double target);{
-
-}
-void driveFunction(double target, double Kp, double Ki, double Kd, double intKickin, double mv){
-
-}
-void driveDist2(double target, double velo){
-
-}
-void rotCall(double target){
-
-}
-void rotCall2(double target, double p, double d){
-
-}
-void rotDeg(double target, double Kp, double Ki, double Kd, double timer, double mv, double iw){
-
-}
-*/

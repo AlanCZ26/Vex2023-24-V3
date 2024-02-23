@@ -2,7 +2,7 @@
 #include "pros/llemu.hpp"
 #include "pros/screen.h"
 
-lemlib::TrackingWheel verticalTrackingWheel(&odomPodVertical, 2.75, 4.3, 2);
+lemlib::TrackingWheel verticalTrackingWheel(&odomPodVertical, 2.75, 0);
 
 // odometry struct
 lemlib::OdomSensors_t sensors {
@@ -15,8 +15,8 @@ lemlib::OdomSensors_t sensors {
 
 // forward/backward PID
 lemlib::ChassisController_t lateralController {
-    8, // kP
-    30, // kD
+    10, // kP
+    60, // kD
     1, // smallErrorRange
     100, // smallErrorTimeout
     3, // largeErrorRange
@@ -32,7 +32,15 @@ lemlib::ChassisController_t angularController {
     100, // smallErrorTimeout
     3, // largeErrorRange
     500, // largeErrorTimeout
-    0 // slew rate
+    40 // slew rate
+};
+
+lemlib::Drivetrain_t drivetrain {
+    &leftMotors, // left drivetrain motors
+    &rightMotors, // right drivetrain motors
+    25, // track width 
+    2.75, // wheel diameter
+    450 // wheel rpm
 };
 
 lemlib::Chassis chassis(drivetrain, lateralController, angularController, sensors);
