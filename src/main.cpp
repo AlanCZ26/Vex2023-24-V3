@@ -94,7 +94,8 @@ void initialize()
 	pros::lcd::register_btn1_cb(on_center_button);
 	Task armTask(liftThread);
 	
-	//pros::Task screenTask(screenT);
+	pros::Task screenTask(screenT);
+	pros::Task autonTask(autonThread);
 	//pros::Task odomTrackerTask(odomTracker);
 	chassis.calibrate();
 	chassis.setPose(0,0,0);
@@ -139,6 +140,7 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
+
 int AUTOTIMER = 4;
 void autonomous()
 {
@@ -151,7 +153,11 @@ void autonomous()
 	// pros::screen::print(TEXT_MEDIUM, 6, "x: %i", gyro);
 	AUTOTIMER = 4;
 	startTimer(AUTOTIMER);
-	testingAuto2(3);
+	//testingAuto2(3);
+	mainAuton(0);
+	autonThreadVar = -2;
+	
+
 	//skillsAuto();
 	//testingAuto();
 	//nearsideSafeAWP();
@@ -201,19 +207,19 @@ void opcontrol()
 
 		y = master.get_analog(ANALOG_LEFT_Y);
 		moveDriveMotors(y, x);
-		pros::screen::print(TEXT_MEDIUM, 2, "x: %i", x);
-		pros::screen::print(TEXT_MEDIUM, 3, "x: %i", y);
-		pros::screen::print(TEXT_MEDIUM, 4, "cata: %i", cataRunner);
+		// pros::screen::print(TEXT_MEDIUM, 2, "x: %i", x);
+		// pros::screen::print(TEXT_MEDIUM, 3, "x: %i", y);
+		// pros::screen::print(TEXT_MEDIUM, 4, "cata: %i", cataRunner);
 
-		pros::screen::print(TEXT_MEDIUM, 5, "gyro heading: %f", gyro.get_heading());
-		pros::screen::print(TEXT_MEDIUM, 6, "gyro rotation: %f", gyro.get_rotation());
+		// pros::screen::print(TEXT_MEDIUM, 5, "gyro heading: %f", gyro.get_heading());
+		// pros::screen::print(TEXT_MEDIUM, 6, "gyro rotation: %f", gyro.get_rotation());
 		// pros::screen::print(TEXT_MEDIUM, 5, "dist: %i", catapultLoadDist.get());
 		if (!master.get_digital(DIGITAL_LEFT)) {
-			pros::screen::print(TEXT_MEDIUM, 8, "l1: %f", lMotor1.get_actual_velocity());
-			pros::screen::print(TEXT_MEDIUM, 9, "l2: %f", lMotor2.get_actual_velocity());
+			 //pros::screen::print(TEXT_MEDIUM, 8, "l1: %f", lMotor1.get_actual_velocity());
+			 //pros::screen::print(TEXT_MEDIUM, 9, "l2: %f", lMotor2.get_actual_velocity());
 			//pros::screen::print(TEXT_MEDIUM, 10, "lT: %f", ltMotor.get_actual_velocity());
-			pros::screen::print(TEXT_MEDIUM, 10, "r1: %f", rMotor1.get_actual_velocity());
-			pros::screen::print(TEXT_MEDIUM, 11, "r2: %f", rMotor2.get_actual_velocity());
+			 //pros::screen::print(TEXT_MEDIUM, 10, "r1: %f", rMotor1.get_actual_velocity());
+			 //pros::screen::print(TEXT_MEDIUM, 11, "r2: %f", rMotor2.get_actual_velocity());
 			//pros::screen::print(TEXT_MEDIUM, 13, "rT: %f", rtMotor.get_actual_velocity());
 		}
 

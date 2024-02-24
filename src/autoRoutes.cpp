@@ -2,29 +2,64 @@
 #include "pros/llemu.hpp"
 #include "pros/screen.h"
 
+
+ASSET(skills_path0_txt);
+ASSET(skills_path1_txt);
+
 void testingAuto2(int i) {
     if (i == 1){
-    chassis.turnTo(53, 53, 1000); // turn to the point (53, 53) with a timeout of 1000 ms
+    chassis.turnTo(100, 0, 1000); // turn to the point (53, 53) with a timeout of 1000 ms
     delay(2000);
-    chassis.turnTo(-20, 32, 1500, true); // turn to the point (-20, 32) with the back of the robot facing the point, and a timeout of 1500 ms
+    chassis.turnTo(-100, 0, 1000); // turn to the point (-20, 32) with the back of the robot facing the point, and a timeout of 1500 ms
     delay(2000);
-    chassis.turnTo(10, 0, 1000, false); // turn to the point (10, 0) with a timeout of 1000 ms, and a maximum speed of 50
+    chassis.turnTo(0, 10, 2000); // turn to the point (10, 0) with a timeout of 1000 ms, and a maximum speed of 50
     }
     else if (i == 2){
-    chassis.moveTo(24, 24, 1000); // move to the point (53, 53) with a timeout of 1000 ms
+    chassis.moveToPoint(24, 24, 1000); // move to the point (53, 53) with a timeout of 1000 ms
     delay(2000);
-    chassis.moveTo(10, 0, 1000, 50);// move to the point (10, 0) with a timeout of 1000 ms, and a maximum speed of 50
+    chassis.moveToPoint(10, 0, 1000, 50);// move to the point (10, 0) with a timeout of 1000 ms, and a maximum speed of 50
     }
     else if (i == 3){
-        chassis.moveTo(0,-10,1000);
+        std::cout<<"first"<<std::endl;
+        chassis.moveToPoint(0,10,1000);
         delay(1000);
-        chassis.moveTo(0,0,1000);
+        chassis.moveToPoint(0,0,1000,false);
         delay(1000);
-        chassis.moveTo(0,24,1000);
+        chassis.moveToPoint(0,24,1000);
         delay(1000);
-        chassis.moveTo(0,0,1000);
+        chassis.moveToPoint(0,0,1000,false);
     }
   }
+
+void mainAuton(int i) {
+    if (i == 0) {
+        chassis.setPose(-47.302,-53.365,0); // skills start pos
+        autonThreadVar = 1;
+        chassis.follow(skills_path0_txt,15, 1400);
+        //chassis.moveToPoint(-60,-44,10000,false);
+        intMotor = 0;
+        chassis.follow(skills_path1_txt,6, 1000,false);
+        pros::delay(100);
+        chassis.turnTo(43,12,1000);
+    }
+}
+
+int autonThreadVar = -1;
+void autonThread(){
+    int currentPos = 0;
+    while (true){
+        pros::delay(20);
+        if (autonThreadVar == -2) break;
+        else if (autonThreadVar == 1){
+            if (currentPos == 0){
+                while (getTime(AUTOTIMER) < 400) pros::delay(50);
+                intMotor = -127;
+            }
+            currentPos++;
+            autonThreadVar = 0;
+        }
+    }
+}
 
 /**/
 // void testingAuto() {

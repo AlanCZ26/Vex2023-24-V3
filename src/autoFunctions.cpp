@@ -343,6 +343,6 @@ void turn(double targetDegree, double time, double kP, double kI, double kD, dou
 void odomDrive(double x, double y, int time){
     int maxSpeed = 200;
     //trackerCurrentState = 1;
-    chassis.moveTo(x,y,time,maxSpeed);
+    chassis.moveToPoint(x,y,time,maxSpeed);
     //trackerCurrentState = 0;
 }

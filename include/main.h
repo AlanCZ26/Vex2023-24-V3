@@ -88,7 +88,7 @@ extern Motor rMotor3;
 extern pros::MotorGroup leftMotors;
 extern pros::MotorGroup rightMotors;
 
-extern lemlib::Drivetrain_t drivetrain;
+extern lemlib::Drivetrain drivetrain;
 
 extern Motor intMotor;
 extern Motor cataMotor;

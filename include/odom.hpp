@@ -3,9 +3,9 @@
 
 #include "lemlib/api.hpp"
 
-extern lemlib::OdomSensors_t sensors;
-extern lemlib::ChassisController_t angularController;
-extern lemlib::ChassisController_t lateralController;
+extern lemlib::OdomSensors sensors;
+//extern lemlib::ControllerSettings angularController;
+//extern lemlib::ControllerSettings lateralController;
 
 extern lemlib::Chassis chassis;
 
