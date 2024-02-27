@@ -25,12 +25,12 @@ Rotation liftRot(5); //temp
 Rotation odomPodVertical(3);
 Imu gyro(10); 
 
-ADIDigitalOut wingsSolL('a');
-ADIDigitalOut wingsSolR('b');
+ADIDigitalOut wingsSolL('b');
+ADIDigitalOut wingsSolR('a');
 ADIDigitalOut backRight('c');
 ADIDigitalOut backLeft('d');
-ADIDigitalOut ratchPiston('g');
-ADIDigitalOut PTOpiston('h');
+ADIDigitalOut hangSol1('g');
+ADIDigitalOut hangSol2('h');
 
 Controller master(E_CONTROLLER_MASTER);
 /**
@@ -40,9 +40,7 @@ Controller master(E_CONTROLLER_MASTER);
  * "I was pressed!" and nothing.
  */
 
-
-
-
+/*
 int position = -1;
 void liftThread()
 {
@@ -56,6 +54,7 @@ void liftThread()
 		}
 	}
 }
+*/
 void screenT() {
     // loop forever
     while (true) {
@@ -63,7 +62,8 @@ void screenT() {
         pros::lcd::print(0, "x: %f", pose.x); // print the x position
         pros::lcd::print(1, "y: %f", pose.y); // print the y position
         pros::lcd::print(2, "heading: %f", pose.theta); // print the heading
-        pros::delay(10);
+		pros::lcd::print(3, "pitch: %f", gyro.get_roll());
+        pros::delay(50);
     }
 }
 
@@ -92,10 +92,10 @@ void initialize()
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
 	pros::lcd::register_btn1_cb(on_center_button);
-	Task armTask(liftThread);
+	//Task armTask(liftThread);
 	
 	pros::Task screenTask(screenT);
-	pros::Task autonTask(autonThread);
+
 	//pros::Task odomTrackerTask(odomTracker);
 	chassis.calibrate();
 	chassis.setPose(0,0,0);
@@ -155,7 +155,6 @@ void autonomous()
 	startTimer(AUTOTIMER);
 	//testingAuto2(3);
 	mainAuton(0);
-	autonThreadVar = -2;
 	
 
 	//skillsAuto();
@@ -186,6 +185,7 @@ void opcontrol()
 	bool toggleBack = false;
 	bool toggleWings = false;
 	bool toggleCata = false;
+	bool toggleHang = false;
 
 	cataRunner = false;
 	int iter = 0;
@@ -200,17 +200,20 @@ void opcontrol()
 	while (true)
 	{	
 		x = master.get_analog(ANALOG_RIGHT_X);
+		y = master.get_analog(ANALOG_LEFT_Y);
 		if (abs(x)<100) x /= 1.5; //scale
+		else x *= 1.1;
 		if (x > 5 && x < 10) x = 10; //deadzones
 		else if (x < -5 && x > -10) x = -10;
 		else if (abs(x)<5) x = 0;
 
-		y = master.get_analog(ANALOG_LEFT_Y);
+
 		moveDriveMotors(y, x);
+
+		/* print stuff
 		// pros::screen::print(TEXT_MEDIUM, 2, "x: %i", x);
 		// pros::screen::print(TEXT_MEDIUM, 3, "x: %i", y);
 		// pros::screen::print(TEXT_MEDIUM, 4, "cata: %i", cataRunner);
-
 		// pros::screen::print(TEXT_MEDIUM, 5, "gyro heading: %f", gyro.get_heading());
 		// pros::screen::print(TEXT_MEDIUM, 6, "gyro rotation: %f", gyro.get_rotation());
 		// pros::screen::print(TEXT_MEDIUM, 5, "dist: %i", catapultLoadDist.get());
@@ -222,7 +225,7 @@ void opcontrol()
 			 //pros::screen::print(TEXT_MEDIUM, 11, "r2: %f", rMotor2.get_actual_velocity());
 			//pros::screen::print(TEXT_MEDIUM, 13, "rT: %f", rtMotor.get_actual_velocity());
 		}
-
+		*/
 
 		if (master.get_digital_new_press(DIGITAL_R1))
 		{
@@ -255,22 +258,20 @@ void opcontrol()
 			intMotor = -127;
 		else 
 			intMotor.brake();
-		if (master.get_digital_new_press(DIGITAL_RIGHT)){
-			ptoSwitcher(PTOMODECATA);
-		}
-		else if (master.get_digital_new_press(DIGITAL_DOWN)){
-			ptoSwitcher(PTOMODELIFT);
-		}
 		if (master.get_digital(DIGITAL_X)){
 			cataMotor.move_voltage(master.get_analog(ANALOG_RIGHT_Y)*150);
         	cataMotor2.move_voltage(master.get_analog(ANALOG_RIGHT_Y)*150);
 			
 		}
-		if (master.get_digital_new_press(DIGITAL_UP)){
-			ratchPiston.set_value(false);
+		if (master.get_digital_new_press(DIGITAL_X)){
+			toggleHang = !toggleHang;
+			hangSol1.set_value(toggleHang);
+			hangSol2.set_value(toggleHang);
 		}
-		if (master.get_digital_new_press(DIGITAL_LEFT)){
-			ratchPiston.set_value(true);
+		if (toggleHang && (gyro.get_roll() < -10)){
+			toggleHang = false;
+			hangSol1.set_value(false);
+			hangSol2.set_value(false);
 		}
 		if (master.get_digital_new_press(DIGITAL_A)) {
 			toggleCata = !toggleCata;

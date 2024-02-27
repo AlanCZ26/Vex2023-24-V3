@@ -99,12 +99,13 @@ extern Rotation liftRot;
 extern Rotation odomPodVertical;
 extern Imu gyro;
 
-extern ADIDigitalOut PTOpiston;
+
 extern ADIDigitalOut wingsSolL;
 extern ADIDigitalOut wingsSolR;
 extern ADIDigitalOut backRight;
 extern ADIDigitalOut backLeft;
-extern ADIDigitalOut ratchPiston;
+extern ADIDigitalOut hangSol1;
+extern ADIDigitalOut hangSol2;
 
 extern Controller master;
 

@@ -34,7 +34,7 @@ void moveDriveMotors(int forwardPower, int turningPower)
     }    
 
 }
-
+/*
 void ptoSwitcher(int i)
 {
     if (i == PTOMODECATA)
@@ -84,10 +84,10 @@ void lift(int input)
     if (input == 3 || input == 4) ratchPiston.set_value(true);
     state = input;
 }
-
+*/
 void catapult(bool i){
     if (i) {
-        ptoSwitcher(PTOMODECATA);
+        //ptoSwitcher(PTOMODECATA);
         cataMotor.move(127);
         cataMotor2.move(127); 
     }
@@ -103,4 +103,3 @@ void cataTracker(){
         cataEff = (cataMotor.get_efficiency() + cataMotor2.get_efficiency())/2;
     } 
 }
-

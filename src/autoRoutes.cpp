@@ -5,6 +5,8 @@
 
 ASSET(skills_path0_txt);
 ASSET(skills_path1_txt);
+ASSET(skills_path2_txt);
+ASSET(skills_path3_txt);
 
 void testingAuto2(int i) {
     if (i == 1){
@@ -34,32 +36,43 @@ void testingAuto2(int i) {
 void mainAuton(int i) {
     if (i == 0) {
         chassis.setPose(-47.302,-53.365,0); // skills start pos
-        autonThreadVar = 1;
-        chassis.follow(skills_path0_txt,15, 1400);
-        //chassis.moveToPoint(-60,-44,10000,false);
-        intMotor = 0;
-        chassis.follow(skills_path1_txt,6, 1000,false);
+        chassis.follow(skills_path0_txt,15, 1400); // push balls in
+        chassis.follow(skills_path1_txt,6, 1000,false); // move to center
         pros::delay(100);
-        chassis.turnTo(43,12,1000);
+        chassis.turnTo(43,12,600,true, 127,false); // face alley
+        backRight.set_value(true);
+        pros::delay(1000);
+        backRight.set_value(false);
+        chassis.follow(skills_path2_txt,15,1200,true,false);
+        wingsSolL.set_value(true);
+        chassis.moveToPoint(-10,43,2500,true,90); // big push
+        intMotor = -127;
+        //chassis.moveToPoint(-10,28,1000,false); // back for second push
+        //chassis.moveToPoint(-10,43,1000,true,127,false);
+        chassis.moveToPoint(-12,34,900,false); // back
+        chassis.turnTo(-35,35,800); // turn
+        intMotor = 0;
+        chassis.follow(skills_path3_txt,18,7000);
+        pros::delay(100);
+        wingsSolR.set_value(true);
+        wingsSolL.set_value(true);
+        pros::delay(3000);
+        wingsSolL.set_value(false);
+        chassis.turnTo(65,22,1000,true,127,false); // face goal to push in side
+        delay(100); // testing delay remove
+        moveDriveMotors(127,0); // push
+        delay(1000);
+        moveDriveMotors(0,0);
+        chassis.moveToPoint(59,47,1000,false);
+        chassis.turnTo(65,22,1000,true,127,false);
+        moveDriveMotors(127,0); // push
+        delay(1000);
+        moveDriveMotors(0,0);
+        chassis.moveToPoint(59,40,1000,false);
     }
 }
 
-int autonThreadVar = -1;
-void autonThread(){
-    int currentPos = 0;
-    while (true){
-        pros::delay(20);
-        if (autonThreadVar == -2) break;
-        else if (autonThreadVar == 1){
-            if (currentPos == 0){
-                while (getTime(AUTOTIMER) < 400) pros::delay(50);
-                intMotor = -127;
-            }
-            currentPos++;
-            autonThreadVar = 0;
-        }
-    }
-}
+
 
 /**/
 // void testingAuto() {

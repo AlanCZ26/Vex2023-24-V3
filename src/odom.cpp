@@ -42,7 +42,7 @@ lemlib::ControllerSettings angularController {
 lemlib::Drivetrain drivetrain {
     &leftMotors, // left drivetrain motors
     &rightMotors, // right drivetrain motors
-    25, // track width 
+    23.5, // track width 
     2.75, // wheel diameter
     450, // wheel rpm
     8 // chase power (recommended value)
