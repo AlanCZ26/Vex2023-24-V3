@@ -1,0 +1,34 @@
+40.047, 64.719, 90.543
+41.921, 64.022, 116.02
+43.772, 63.265, 114.273
+45.585, 62.421, 113.723
+47.355, 61.49, 113.348
+49.076, 60.472, 112.902
+50.743, 59.368, 112.398
+52.348, 58.175, 112.137
+53.883, 56.893, 111.628
+55.349, 55.533, 111.195
+56.725, 54.083, 111.031
+58.023, 52.562, 110.813
+59.218, 50.958, 107.935
+60.321, 49.29, 104.979
+61.328, 47.563, 101.937
+62.219, 45.773, 98.801
+63.009, 43.936, 95.562
+63.699, 42.059, 92.21
+64.286, 40.148, 88.731
+64.775, 38.209, 85.11
+65.166, 36.248, 81.328
+65.463, 34.27, 77.361
+65.67, 32.281, 73.178
+65.792, 30.285, 68.743
+65.835, 28.285, 64
+65.832, 26.955, 0
+65.832, 26.955, 0
+65.786, 6.955, 0
+endData
+157.4
+127
+200
+40.047, 64.719, 42.483, 63.704, 66.441, 57.004, 65.832, 26.955
+#PATH.JERRYIO-DATA {"appVersion":"0.6.0","format":"LemLib v0.4.x (inch, byte-voltage)","gc":{"robotWidth":12,"robotHeight":12,"robotIsHolonomic":false,"showRobot":false,"uol":2.54,"pointDensity":2,"controlMagnetDistance":1.968503937007874,"fieldImage":{"displayName":"VRC 2024 - Over Under","signature":"VRC 2024 - Over Under","origin":{"__type":"built-in"}}},"paths":[{"segments":[{"controls":[{"uid":"wkL3MykzMH","x":40.046619913230884,"y":64.71943096502471,"lock":false,"visible":true,"heading":0,"__type":"end-point"},{"uid":"8xyBkhFNfN","x":42.48303970109729,"y":63.70425605341371,"lock":false,"visible":true,"__type":"control"},{"uid":"B3OMREmt22","x":66.44116761511698,"y":57.00410163678109,"lock":false,"visible":true,"__type":"control"},{"uid":"XjAIeg0R9k","x":65.83206266815039,"y":26.95492425309537,"lock":false,"visible":true,"heading":0,"__type":"end-point"}],"speedProfiles":[],"lookaheadKeyframes":[],"uid":"vzrpqyQwtT"}],"pc":{"speedLimit":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":127,"label":"127"},"step":1,"from":64,"to":127},"bentRateApplicableRange":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":1,"label":"1"},"step":0.001,"from":0,"to":0.046},"maxDecelerationRate":157.4},"name":"Path","uid":"QtRWMxXfp2","lock":false,"visible":true}]}
