@@ -142,7 +142,7 @@ void competition_initialize() {}
  */
 
 int AUTOTIMER = 4;
-int autonMode = -1;
+int autonMode = 3;
 void autonomous()
 {
 	/*
@@ -155,7 +155,7 @@ void autonomous()
 	AUTOTIMER = 4;
 	startTimer(AUTOTIMER);
 	//testingAuto2(4);
-	mainAuton(-1);
+	mainAuton(autonMode);
 	
 
 	//skillsAuto();
