@@ -15,27 +15,27 @@ lemlib::OdomSensors sensors {
 
 // forward/backward PID
 lemlib::ControllerSettings lateralController {
-    10, // kP
+    15, // kP
     0, //kI
     60, // kD
     0, //winduprange?
     1, // smallErrorRange
     100, // smallErrorTimeout
     3, // largeErrorRange
-    500, // largeErrorTimeout
+    400, // largeErrorTimeout
     5 // slew rate
 };
  
 // turning PID
 lemlib::ControllerSettings angularController {
-    4, // kP
+    5, // kP
     0, // kI
     40, // kD
     0, // windup range
     1, // smallErrorRange
     100, // smallErrorTimeout
-    3, // largeErrorRange
-    500, // largeErrorTimeout
+    5, // largeErrorRange
+    350, // largeErrorTimeout
     40 // slew rate
 };
 

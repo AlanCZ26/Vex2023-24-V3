@@ -11,8 +11,22 @@ ASSET(skills_path3_1_txt);
 ASSET(skills_path4_txt);
 ASSET(skills_path5_txt);
 ASSET(skills_path6_txt);
-// ASSET(skills_path7_txt);
-// ASSET(skills_path8_txt);
+ASSET(skills_path10_txt);
+ASSET(skills_path11_txt);
+ASSET(skills_path30_txt);
+ASSET(skills_path31_txt);
+ASSET(skills_path32_txt);
+ASSET(skills_path33_txt);
+
+ASSET(rs_safe_path00_txt);
+ASSET(rs_safe_path01_txt);
+ASSET(rs_safe_path10_txt);
+
+ASSET(ls_rush_path00_txt);
+ASSET(ls_rush_path01_txt);
+ASSET(ls_rush_path10_txt);
+ASSET(ls_rush_path20_txt);
+ASSET(ls_rush_path30_txt);
 
 void testingAuto2(int i) {
     if (i == 1){
@@ -38,21 +52,36 @@ void testingAuto2(int i) {
         chassis.moveToPoint(0,0,1000,false);
     }
     else if (i == 4){
-        chassis.setPose(0,60,90); // temp start pos
-        chassis.moveToPoint(40,66,3000); // across
-        chassis.follow(skills_path3_1_txt,15,2000);
+        chassis.setPose(24,0,180); // temp start pos
+        chassis.moveToPoint(24,-10,700);
+        chassis.turnTo(43,-58,800);
+        chassis.moveToPoint(43,-58,1300);
+        chassis.turnTo(56,-48,1000);
+        chassis.follow(skills_path10_txt,10,2000);
+        chassis.moveToPoint(63,-40,1000,false);
+        chassis.moveToPoint(63,-24,1000);
+        chassis.moveToPoint(63,-40,1000,false);
+        chassis.turnTo(36,-60,1000);
+        wingsSolL.set_value(false);
+        chassis.follow(skills_path11_txt,25,2000);
+        hangSol1.set_value(true);
+        hangSol2.set_value(true);
+        while (gyro.get_roll() > -10) {
+            pros::delay(10);
+        }
+        hangSol1.set_value(false);
+        hangSol2.set_value(false);
     }
   }
 
 void mainAuton(int i) {
-    if (i == 0) {
-
+    if (i == 0) { // skills
         chassis.setPose(-47.302,-53.365,0); // skills start pos
         chassis.follow(skills_path0_txt,15, 1400); // push balls in
         chassis.follow(skills_path1_txt,6, 1200,false); // move to center
         pros::delay(100);
         chassis.turnTo(43,5,1000,true, 127,false); // aim
-        backRight.set_value(true);
+        //backRight.set_value(true);
         catapult(true);
         lMotor1.set_brake_mode(MOTOR_BRAKE_BRAKE);
         lMotor2.set_brake_mode(MOTOR_BRAKE_BRAKE);
@@ -60,7 +89,7 @@ void mainAuton(int i) {
         rMotor1.set_brake_mode(MOTOR_BRAKE_BRAKE);
         rMotor2.set_brake_mode(MOTOR_BRAKE_BRAKE);
         rMotor3.set_brake_mode(MOTOR_BRAKE_BRAKE);
-        pros::delay(22000); // 22000
+        pros::delay(21000); // 21000 <===================
         lMotor1.set_brake_mode(MOTOR_BRAKE_COAST);
         lMotor2.set_brake_mode(MOTOR_BRAKE_COAST);
         lMotor3.set_brake_mode(MOTOR_BRAKE_COAST);
@@ -69,16 +98,16 @@ void mainAuton(int i) {
         rMotor3.set_brake_mode(MOTOR_BRAKE_COAST);
         catapult(false);
         backRight.set_value(false);
-        chassis.moveToPoint(-14,-28,2000); // back
+        chassis.moveToPoint(-14,-28,1000); // back
         //chassis.follow(skills_path2_txt,15,1200,true,false);
-        wingsSolL.set_value(true);
         intMotor = -127;
-        chassis.moveToPoint(-10,45,2500,true,90); // big push
-        chassis.moveToPoint(-10,30 ,1000,false); // back for second push
-        chassis.moveToPoint(-10,45,1000,true,127,false);
-        chassis.moveToPoint(-12,35,1100,false); // back
+        chassis.moveToPoint(-10,43.5,2200,true,90); // big push
+        wingsSolL.set_value(true);
+        chassis.moveToPoint(-10,30 ,7000,false); // back for second push
+        chassis.moveToPoint(-10,43.5,500,true,127,false);
+        chassis.moveToPoint(-12,35,500,false); // back
 
-        chassis.turnTo(-60,42,1000,true,127,false);
+        chassis.turnTo(-60,42,600,true,127);
         intMotor = 0;
         catapult(true);
         delay(350);
@@ -87,47 +116,79 @@ void mainAuton(int i) {
         cataMotor.set_brake_mode(MOTOR_BRAKE_BRAKE);
         cataMotor2.set_brake_mode(MOTOR_BRAKE_BRAKE);
         chassis.moveToPoint(-60,40,1400);
-        chassis.turnTo(-48,70,1800);
+        chassis.turnTo(-48,70,900);
         chassis.follow(skills_path3_txt,15,2000,true,false); // curve to alley
         
         //chassis.setPose(16,60,90); //temp
         intMotor = -127;
-        wingsSolR.set_value(true);
         lemlib::Pose pose = chassis.getPose();
         chassis.setPose(pose.x,pose.y-2,pose.theta); // scuffed !!
         intMotor = 0;
-        chassis.moveToPoint(33,66,3000); // across
+        chassis.moveToPoint(33,66,2000); // across
+        delay(500);
+        wingsSolR.set_value(true);
         chassis.follow(skills_path3_1_txt,15,2000);
         delay(500);
         intMotor = -127;
-        chassis.moveToPoint(60,44,1500,false,127,false); // back up 1 
         wingsSolR.set_value(false);
-        moveDriveMotors(127,0);delay(1000);moveDriveMotors(0,0); // push
+        chassis.moveToPoint(55,51,1500,false,127,false); // back up 1 
+        chassis.follow(skills_path3_1_txt,15,1500); //push again
+        //moveDriveMotors(127,0);delay(1000);moveDriveMotors(0,0); // push
         cataMotor.set_brake_mode(MOTOR_BRAKE_COAST);
         cataMotor2.set_brake_mode(MOTOR_BRAKE_COAST);
         chassis.moveToPoint(56,44,1300,false); // back up
         intMotor = 0;
-        chassis.turnTo(11,37,800); // face mid
-        chassis.moveToPoint(11,37,1500);
-
+        chassis.turnTo(16,37,800); // face mid
+        chassis.moveToPoint(16,36,1500,true,80);
         //anchor
-        chassis.turnTo(12,16,1000);
-        chassis.moveToPoint(12,16,1500);
-        chassis.turnTo(46,12,1000);
-        chassis.moveToPoint(46,12,1500);
-        chassis.turnTo(12,24,1000,false);
-        chassis.moveToPoint(12,24,1500,false);
-        chassis.turnTo(12,0,1000);
-        chassis.moveToPoint(12,0,1500);
-        chassis.turnTo(48,0,1000);
+        chassis.turnTo(16,16,700);
+        lemlib::Pose pose2 = chassis.getPose();
+        chassis.setPose(pose2.x,pose2.y-2,pose2.theta); // scuffed pt2!!
+
+        chassis.moveToPoint(14,20,1000,true,80);
+        chassis.turnTo(48,12,600);
+        chassis.moveToPoint(48,12,1000);
         wingsSolL.set_value(true);
-        chassis.moveToPoint(48,0,1500);
-        chassis.turnTo(12,0,1000,false);
-        chassis.moveToPoint(12,0,1500,false);
-        chassis.turnTo(12,-12,1000);
-        chassis.moveToPoint(12,-12,1500);
-        chassis.turnTo(48,-12,1000);
-        chassis.moveToPoint(48,-12,1500);
+        chassis.follow(skills_path30_txt,15,1400,false);
+        chassis.follow(skills_path31_txt,25,2000,true,false);
+        lemlib::Pose pose3 = chassis.getPose();
+        chassis.setPose(40,-7,pose3.theta); // scuffed pt3!!
+        chassis.follow(skills_path32_txt,15,1400,false,false);
+        chassis.follow(skills_path33_txt,25,2500,true,false);
+        lemlib::Pose pose4 = chassis.getPose();
+        chassis.setPose(40,-12,pose4.theta); // scuffed pt4!!
+        // chassis.turnTo(12,24,800,false);
+        // chassis.moveToPoint(12,24,1000,false);
+        // chassis.turnTo(12,0,800);
+        // chassis.moveToPoint(12,0,1000);
+        // chassis.turnTo(48,0,800);
+        // chassis.moveToPoint(48,4,1000);
+        // chassis.turnTo(12,0,800,false);
+        // chassis.moveToPoint(12,0,1000,false);
+        // chassis.turnTo(12,-12,800);
+        // chassis.moveToPoint(12,-12,1000);
+        // chassis.turnTo(48,-12,800);
+        // chassis.moveToPoint(48,-9,1000);
+
+        // hang
+        chassis.moveToPoint(24,-10,1500,false);
+        chassis.turnTo(45,-58,800);
+        chassis.moveToPoint(45,-58,1600,true,80);
+        wingsSolL.set_value(false);
+        chassis.turnTo(56,-48,1000,true,80);
+        chassis.follow(skills_path10_txt,10,2000);
+        chassis.moveToPoint(63,-40,1000,false);
+        chassis.moveToPoint(63,-24,1000);
+        chassis.moveToPoint(63,-40,1000,false);
+        chassis.turnTo(36,-60,1000);
+        chassis.follow(skills_path11_txt,25,2000);
+        hangSol1.set_value(true);
+        hangSol2.set_value(true);
+        while (gyro.get_roll() > -15) {
+            pros::delay(10);
+        }
+        hangSol1.set_value(false);
+        hangSol2.set_value(false);
         return;
 
         chassis.turnTo(18,23,800); // face to push in
@@ -145,8 +206,98 @@ void mainAuton(int i) {
         chassis.turnTo(48,-12,800,true,110,false);
         wingsSolL.set_value(true);
         chassis.moveToPoint(50,-12,2000,true,90);
+        std::cout<<(getTime(AUTOTIMER))<<std::endl;
 
     }
+    else if (i == 1) // safe 6 ball
+    {
+        chassis.setPose(12,-60,-90);
+        intMotor = -127;
+        delay(50);
+        chassis.moveToPoint(6,-60,500);
+        intMotor = 127;
+        chassis.follow(rs_safe_path00_txt,15,2000,false,false);
+        backLeft.set_value(true);
+        intMotor = 0;
+        chassis.moveToPoint(50,-49,1000,false,50,false);
+        backLeft.set_value(false);
+        chassis.follow(rs_safe_path01_txt,15,2000,false);
+        chassis.moveToPoint(56,-40,1000);
+        chassis.turnTo(64,-17,1000,true,127,false);
+        intMotor = -127;
+        delay(200);
+        chassis.moveToPoint(64,-24,1000); // push in
+        chassis.moveToPoint(55,-42,1000,false);
+        chassis.turnTo(3,-24,1000);
+        chassis.moveToPoint(8,-28,2000,true,80);
+        intMotor = 127; // go to mid
+        chassis.turnTo(48,-10,1000,true,127,false);
+        intMotor = -127;
+        delay(400);
+        chassis.moveToPoint(27,-17,1000); // first ball
+        intMotor = -127;
+        delay(800);
+        intMotor = 127;
+        chassis.moveToPoint(15,-16,1000);
+        chassis.turnTo(5,-0,1000);
+        chassis.moveToPoint(8,-4,1000);
+        chassis.turnTo(48,-10,1000,true,127,false);
+        wingsSolL.set_value(true); 
+        intMotor = -127;
+        chassis.moveToPoint(48,-8,1000);
+    }
+    else if (i == 2) {// safe l awp 
+        chassis.setPose(-48,-55,-45);
+
+    }
+    else if (i == 3) { // rush l awp
+        //chassis.setPose(-40,-54,0);
+        chassis.setPose(-38,-55,19);
+        //chassis.follow(ls_rush_path00_txt,30,1500);
+        intMotor = 127;
+        chassis.moveToPoint(-26,-11,1500,true,127,false);
+        pros::delay(200);
+        chassis.follow(ls_rush_path01_txt,25,1500,false,false);
+        intMotor = 0;
+        chassis.turnTo(0,-65,1000,true,127,false);
+        intMotor = -127;
+        delay(400);
+        chassis.follow(ls_rush_path10_txt,15,1500,false,false);
+        chassis.follow(ls_rush_path20_txt,15,1500);
+        delay(500);
+        backRight.set_value(true);
+        chassis.turnTo(-34,-56,1000,true,90,false);
+        backRight.set_value(false);
+        chassis.turnTo(0,-70,1000);
+        chassis.follow(ls_rush_path30_txt,15,1500,true,false);
+        moveDriveMotors(0,0);
+        return;
+    }
+    else if (i == -1) { // macro
+        chassis.setPose(-47.302,-53.365,0); // skills start pos
+        chassis.follow(skills_path0_txt,15, 1400); // push balls in
+        chassis.follow(skills_path1_txt,6, 1200,false); // move to center
+        pros::delay(100);
+        chassis.turnTo(43,5,1000,true, 127,false); // aim
+        //backRight.set_value(true);
+        catapult(true);
+        lMotor1.set_brake_mode(MOTOR_BRAKE_BRAKE);
+        lMotor2.set_brake_mode(MOTOR_BRAKE_BRAKE);
+        lMotor3.set_brake_mode(MOTOR_BRAKE_BRAKE);
+        rMotor1.set_brake_mode(MOTOR_BRAKE_BRAKE);
+        rMotor2.set_brake_mode(MOTOR_BRAKE_BRAKE);
+        rMotor3.set_brake_mode(MOTOR_BRAKE_BRAKE);
+        pros::delay(21000); // 21000 <===================
+        lMotor1.set_brake_mode(MOTOR_BRAKE_COAST);
+        lMotor2.set_brake_mode(MOTOR_BRAKE_COAST);
+        lMotor3.set_brake_mode(MOTOR_BRAKE_COAST);
+        rMotor1.set_brake_mode(MOTOR_BRAKE_COAST);
+        rMotor2.set_brake_mode(MOTOR_BRAKE_COAST);
+        rMotor3.set_brake_mode(MOTOR_BRAKE_COAST);
+        catapult(false);
+        backRight.set_value(false);     
+    }
+
 }
 
 

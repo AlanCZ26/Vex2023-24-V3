@@ -1,0 +1,31 @@
+-38.657, -55.304, 126.988
+-38.204, -53.356, 126.988
+-37.752, -51.408, 126.986
+-37.299, -49.46, 126.984
+-36.846, -47.512, 126.982
+-36.393, -45.564, 126.979
+-35.938, -43.616, 126.975
+-35.484, -41.669, 126.971
+-35.028, -39.721, 126.967
+-34.572, -37.774, 125.348
+-34.114, -35.827, 123.434
+-33.656, -33.88, 121.491
+-33.195, -31.934, 119.516
+-32.733, -29.988, 117.507
+-32.268, -28.043, 115.464
+-31.8, -26.098, 113.384
+-31.329, -24.155, 111.265
+-30.86, -22.21, 109.105
+-30.395, -20.265, 106.902
+-29.936, -18.319, 104.652
+-29.48, -16.371, 102.352
+-29.028, -14.423, 100
+-28.903, -13.885, 0
+-28.903, -13.885, 0
+-24.389, 5.599, 0
+endData
+119
+127
+200
+-38.657, -55.304, -30.506, -20.164, -32.243, -28.315, -28.903, -13.885
+#PATH.JERRYIO-DATA {"appVersion":"0.6.0","format":"LemLib v0.4.x (inch, byte-voltage)","gc":{"robotWidth":12,"robotHeight":12,"robotIsHolonomic":false,"showRobot":false,"uol":2.54,"pointDensity":2,"controlMagnetDistance":1.968503937007874,"fieldImage":{"displayName":"VRC 2024 - Over Under","signature":"VRC 2024 - Over Under","origin":{"__type":"built-in"}}},"paths":[{"segments":[{"controls":[{"uid":"WFU6TThhay","x":-38.656525421698674,"y":-55.304289743303954,"lock":false,"visible":true,"heading":0,"__type":"end-point"},{"uid":"wwQRWLSlLG","x":-30.50621935757684,"y":-20.164445565204883,"lock":false,"visible":true,"__type":"control"},{"uid":"Jy6hHvx6Ih","x":-32.243169830258545,"y":-28.31475162932671,"lock":false,"visible":true,"__type":"control"},{"uid":"mGNK6c62pu","x":-28.902880459716812,"y":-13.884701548586417,"lock":false,"visible":true,"heading":0,"__type":"end-point"}],"speedProfiles":[],"lookaheadKeyframes":[],"uid":"8bJtCdfaPL"}],"pc":{"speedLimit":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":127,"label":"127"},"step":1,"from":100,"to":127},"bentRateApplicableRange":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":1,"label":"1"},"step":0.001,"from":0,"to":0.078},"maxDecelerationRate":119},"name":"Path","uid":"Oc3gqmL1Y3","lock":false,"visible":true}]}

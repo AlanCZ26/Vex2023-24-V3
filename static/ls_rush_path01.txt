@@ -1,0 +1,35 @@
+-26.549, -6.241, 79.561
+-27.079, -8.17, 78.056
+-27.593, -10.103, 76.522
+-28.091, -12.04, 74.956
+-28.572, -13.981, 73.356
+-29.037, -15.926, 71.721
+-29.48, -17.876, 70.048
+-29.905, -19.831, 68.334
+-30.31, -21.789, 66.576
+-30.693, -23.752, 64.77
+-31.055, -25.719, 62.912
+-31.394, -27.69, 60.998
+-31.709, -29.665, 59.022
+-32.002, -31.644, 56.977
+-32.27, -33.625, 54.856
+-32.514, -35.611, 52.65
+-32.735, -37.598, 50.347
+-32.931, -39.589, 47.933
+-33.105, -41.581, 45.392
+-33.258, -43.575, 42.699
+-33.39, -45.571, 39.825
+-33.502, -47.568, 36.726
+-33.599, -49.565, 33.341
+-33.681, -51.564, 29.57
+-33.753, -53.562, 25.243
+-33.816, -55.561, 20
+-33.858, -57, 0
+-33.858, -57, 0
+-34.442, -76.992, 0
+endData
+59.3
+127
+200
+-26.549, -6.241, -32.843, -28.778, -33.452, -42.788, -33.858, -57
+#PATH.JERRYIO-DATA {"appVersion":"0.6.0","format":"LemLib v0.4.x (inch, byte-voltage)","gc":{"robotWidth":12,"robotHeight":12,"robotIsHolonomic":false,"showRobot":true,"uol":2.54,"pointDensity":2,"controlMagnetDistance":1.968503937007874,"fieldImage":{"displayName":"VRC 2024 - Over Under","signature":"VRC 2024 - Over Under","origin":{"__type":"built-in"}}},"paths":[{"segments":[{"controls":[{"uid":"WFU6TThhay","x":-26.548854288450972,"y":-6.241295356584454,"lock":false,"visible":true,"heading":0,"__type":"end-point"},{"uid":"wwQRWLSlLG","x":-32.842938740439195,"y":-28.77817839434874,"lock":false,"visible":true,"__type":"control"},{"uid":"Jy6hHvx6Ih","x":-33.4520436874058,"y":-42.78759217458059,"lock":false,"visible":true,"__type":"control"},{"uid":"mGNK6c62pu","x":-33.8581136520502,"y":-57.00004093713464,"lock":false,"visible":true,"heading":0,"__type":"end-point"}],"speedProfiles":[],"lookaheadKeyframes":[],"uid":"8bJtCdfaPL"}],"pc":{"speedLimit":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":127,"label":"127"},"step":1,"from":20,"to":127},"bentRateApplicableRange":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":1,"label":"1"},"step":0.001,"from":0,"to":0.078},"maxDecelerationRate":59.3},"name":"Path","uid":"Oc3gqmL1Y3","lock":false,"visible":true}]}

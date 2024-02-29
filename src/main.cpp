@@ -62,7 +62,7 @@ void screenT() {
         pros::lcd::print(0, "x: %f", pose.x); // print the x position
         pros::lcd::print(1, "y: %f", pose.y); // print the y position
         pros::lcd::print(2, "heading: %f", pose.theta); // print the heading
-		//pros::lcd::print(3, "pitch: %f", gyro.get_roll());
+		pros::lcd::print(3, "pitch: %f", gyro.get_roll());
         pros::delay(50);
     }
 }
@@ -142,6 +142,7 @@ void competition_initialize() {}
  */
 
 int AUTOTIMER = 4;
+int autonMode = -1;
 void autonomous()
 {
 	/*
@@ -154,7 +155,7 @@ void autonomous()
 	AUTOTIMER = 4;
 	startTimer(AUTOTIMER);
 	//testingAuto2(4);
-	mainAuton(0);
+	mainAuton(-1);
 	
 
 	//skillsAuto();
@@ -197,6 +198,8 @@ void opcontrol()
 	}
 	//if (!master.get_digital(DIGITAL_A)){skillsDriverMacro();}
 	
+	if (autonMode == -1) mainAuton(-1);
+
 	while (true)
 	{	
 		x = master.get_analog(ANALOG_RIGHT_X);
@@ -268,7 +271,7 @@ void opcontrol()
 			hangSol1.set_value(toggleHang);
 			hangSol2.set_value(toggleHang);
 		}
-		if (toggleHang && (gyro.get_roll() < -10)){
+		if (toggleHang && (gyro.get_roll() < -15)){
 			toggleHang = false;
 			hangSol1.set_value(false);
 			hangSol2.set_value(false);
