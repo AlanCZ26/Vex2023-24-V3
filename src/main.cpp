@@ -142,7 +142,7 @@ void competition_initialize() {}
  */
 
 int AUTOTIMER = 4;
-int autonMode = 3;
+int autonMode = -1;
 void autonomous()
 {
 	/*
@@ -204,12 +204,12 @@ void opcontrol()
 	{	
 		x = master.get_analog(ANALOG_RIGHT_X);
 		y = master.get_analog(ANALOG_LEFT_Y);
-		if (abs(x)<100) x /= 1.5; //scale
-		else x *= 1.1;
-		if (x > 5 && x < 10) x = 10; //deadzones
-		else if (x < -5 && x > -10) x = -10;
-		else if (abs(x)<5) x = 0;
-
+		x = (pow((abs(x)/5.3), 1.5))*(abs(x)/x);
+		if (toggleHang){
+			int hangSpdLim = 128;
+			if (y > hangSpdLim) y = hangSpdLim;
+			else if (y < -hangSpdLim) y = -hangSpdLim;
+		}
 
 		moveDriveMotors(y, x);
 
@@ -271,11 +271,12 @@ void opcontrol()
 			hangSol1.set_value(toggleHang);
 			hangSol2.set_value(toggleHang);
 		}
-		if (toggleHang && (gyro.get_roll() < -15)){
+		if (toggleHang && (gyro.get_roll() < -5)){
 			toggleHang = false;
 			hangSol1.set_value(false);
 			hangSol2.set_value(false);
 		}
+
 		if (master.get_digital_new_press(DIGITAL_A)) {
 			toggleCata = !toggleCata;
 			catapult(toggleCata);
