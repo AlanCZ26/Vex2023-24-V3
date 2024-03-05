@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "d_6ballRush",
+    "project_name": "e",
     "target": "v5",
     "templates": {
       "LemLib": {
@@ -348,7 +348,7 @@
     },
     "upload_options": {
       "description": "v4",
-      "slot": 6
+      "slot": 1
     }
   }
 }

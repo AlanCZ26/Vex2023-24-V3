@@ -88,7 +88,7 @@ void mainAuton(int i) {
         chassis.follow(skills_path1_txt,6, 1200,false); // move to center
         pros::delay(100);
         chassis.turnTo(43,5,1000,true, 127,false); // aim
-        //backRight.set_value(true);
+        backRight.set_value(true);
         catapult(true);
         lMotor1.set_brake_mode(MOTOR_BRAKE_BRAKE);
         lMotor2.set_brake_mode(MOTOR_BRAKE_BRAKE);
@@ -187,11 +187,12 @@ void mainAuton(int i) {
         chassis.moveToPoint(63,-40,1000,false);
         chassis.moveToPoint(63,-24,1000);
         chassis.moveToPoint(63,-40,1000,false);
+        return;
         chassis.turnTo(36,-60,1000);
         chassis.follow(skills_path11_txt,25,2000);
         hangSol1.set_value(true);
         hangSol2.set_value(true);
-        while (gyro.get_roll() > -15) {
+        while (gyro.get_roll() > -5) {
             pros::delay(10);
         }
         hangSol1.set_value(false);
@@ -279,7 +280,10 @@ void mainAuton(int i) {
         chassis.turnTo(0,-70,1000);
         chassis.follow(ls_rush_path30_txt,15,1500,true);
         pros::delay(1500);
-        wingsSolL.set_value(true); 
+        chassis.moveToPoint(-51,-50,1500,false,100,false);
+        wingsSolL.set_value(true);
+        wingsSolR.set_value(true);
+        chassis.turnTo(-34,-68,1000);
         return;
     }
     else if (i == -1) { // macro
@@ -288,7 +292,7 @@ void mainAuton(int i) {
         chassis.follow(skills_path1_txt,6, 1200,false); // move to center
         pros::delay(100);
         chassis.turnTo(43,5,1000,true, 127,false); // aim
-        //backRight.set_value(true);
+        backRight.set_value(true);
         catapult(true);
         lMotor1.set_brake_mode(MOTOR_BRAKE_BRAKE);
         lMotor2.set_brake_mode(MOTOR_BRAKE_BRAKE);
@@ -304,7 +308,7 @@ void mainAuton(int i) {
         rMotor2.set_brake_mode(MOTOR_BRAKE_COAST);
         rMotor3.set_brake_mode(MOTOR_BRAKE_COAST);
         catapult(false);
-        backRight.set_value(false);     
+        backRight.set_value(false);
     }
     else if (i == 4) { // rush 6ball
         chassis.setPose(36,-54,0);

@@ -142,7 +142,7 @@ void competition_initialize() {}
  */
 
 int AUTOTIMER = 4;
-int autonMode = 4;
+int autonMode = 3;
 void autonomous()
 {
 	/*
